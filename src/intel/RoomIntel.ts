@@ -1,7 +1,7 @@
 // Room intel - provides information related to room structure and occupation
 
 import {bodyCost} from '../creepSetups/CreepSetup';
-import {isCreep} from '../declarations/typeGuards';
+import {isCreep,isPowerCreep} from '../declarations/typeGuards';
 import {profile} from '../profiler/decorator';
 import {ExpansionEvaluator} from '../strategy/ExpansionEvaluator';
 import {getCacheExpiration, irregularExponentialMovingAverage} from '../utilities/utils';
@@ -185,8 +185,8 @@ export class RoomIntel {
 		for (const tombstone of room.tombstones) {
 			if (tombstone.ticksToDecay == 1) {
 				// record any casualties, which are my creeps which died prematurely
-				if ((tombstone.creep.ticksToLive || 0) > 1 && tombstone.creep.owner.username == MY_USERNAME
-					&& isCreep(tombstone.creep)) {
+				if (isCreep(tombstone.creep) && (tombstone.creep.ticksToLive || 0) > 1 &&
+						tombstone.creep.owner.username == MY_USERNAME) {
 					const body = _.map(tombstone.creep.body, part => part.type);
 					const lifetime = body.includes(CLAIM) ? CREEP_CLAIM_LIFE_TIME : CREEP_LIFE_TIME;
 					const dCost = bodyCost(body) * (tombstone.creep.ticksToLive || 0) / lifetime;
@@ -199,6 +199,8 @@ export class RoomIntel {
 					casualtiesCost[_ROLLING_STATS.AVG1M] = +(irregularExponentialMovingAverage(
 						dCost / dTime, casualtiesCost[_ROLLING_STATS.AVG1M], dTime, 1000000)).toFixed(7);
 					casualtiesCost[_MEM.TICK] = Game.time;
+				} else if (isPowerCreep(tombstone.creep) && tombstone.creep.owner.username == MY_USERNAME) {
+					// TODO: handle power creeps
 				}
 			}
 		}
@@ -207,8 +209,9 @@ export class RoomIntel {
 	/**
 	 * Get the pos a creep was in on the previous tick
 	 */
-	static getPreviousPos(creep: Creep | Zerg): RoomPosition {
-		if (creep.room.memory[_RM.PREV_POSITIONS] && creep.room.memory[_RM.PREV_POSITIONS]![creep.id]) {
+	static getPreviousPos(creep: Creep | PowerCreep | Zerg): RoomPosition {
+		if (creep.room !== undefined && creep.room.memory[_RM.PREV_POSITIONS] &&
+				creep.room.memory[_RM.PREV_POSITIONS]![creep.id]) {
 			return derefRoomPosition(creep.room.memory[_RM.PREV_POSITIONS]![creep.id]);
 		} else {
 			return creep.pos; // no data
