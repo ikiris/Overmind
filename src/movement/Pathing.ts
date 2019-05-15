@@ -5,6 +5,7 @@ import {profile} from '../profiler/decorator';
 import {Cartographer, ROOMTYPE_ALLEY, ROOMTYPE_SOURCEKEEPER} from '../utilities/Cartographer';
 import {Visualizer} from '../visuals/Visualizer';
 import {Zerg} from '../zerg/Zerg';
+import {MY_USERNAME} from '../~settings';
 import {normalizePos} from './helpers';
 import {MoveOptions, SwarmMoveOptions} from './Movement';
 
@@ -50,7 +51,8 @@ export class Pathing {
 		if (room.controller) {
 			if (room.controller.owner && !room.controller.my && room.towers.length > 0) {
 				room.memory[_RM.AVOID] = true;
-			} else {
+			} else if ((!room.controller.reservation || room.controller.reservation.username === MY_USERNAME) &&
+					room.memory[_RM.AVOID] === true) {
 				delete room.memory[_RM.AVOID];
 				// if (room.memory.expansionData == false) delete room.memory.expansionData;
 			}

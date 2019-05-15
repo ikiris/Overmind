@@ -245,7 +245,7 @@ export class Overseer implements IOverseer {
 			const alreadyOwned = RoomIntel.roomOwnedBy(roomName);
 			const alreadyReserved = RoomIntel.roomReservedBy(roomName);
 			const disregardReservations = !onPublicServer() || MY_USERNAME == MUON;
-			if (alreadyOwned || (alreadyReserved && !disregardReservations)) {
+			if (alreadyOwned || (alreadyReserved && !disregardReservations) || Pathing.shouldAvoid(roomName)) {
 				return false;
 			}
 			const neighboringRooms = _.values(Game.map.describeExits(roomName)) as string[];
