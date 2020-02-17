@@ -7,6 +7,16 @@ interface Creep {
 	inRampart: boolean;
 }
 
+// TODO: keep after @types/screeps update.
+interface PowerCreep {
+	hitsPredicted?: number;
+	intel?: { [property: string]: number };
+	boosts: _ResourceConstantSansEnergy[];
+
+	body: BodyPartDefinition[];
+	getActiveBodyparts(type: BodyPartConstant): number;
+}
+
 interface ConstructionSite {
 	isWalkable: boolean;
 }
@@ -40,7 +50,7 @@ interface Room {
 	signedByMe: boolean;
 	creeps: Creep[];
 	sourceKeepers: Creep[];
-	hostiles: Creep[];
+	hostiles: (PowerCreep | Creep)[];
 	dangerousHostiles: Creep[];
 	playerHostiles: Creep[];
 	invaders: Creep[];
@@ -222,6 +232,7 @@ interface StructureTower {
 	isFull: boolean;
 	isEmpty: boolean;
 
+	attack(target: Creep | PowerCreep): CreepActionReturnCode;
 	// run(): void;
 	//
 	// attackNearestEnemy(): number;

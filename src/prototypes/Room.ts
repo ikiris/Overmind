@@ -65,7 +65,7 @@ Object.defineProperty(Room.prototype, 'creeps', {
 Object.defineProperty(Room.prototype, 'hostiles', {
 	get() {
 		if (!this._hostiles) {
-			this._hostiles = this.find(FIND_HOSTILE_CREEPS);
+			this._hostiles = _.flatten([this.find(FIND_HOSTILE_CREEPS), this.find(FIND_HOSTILE_POWER_CREEPS)]);
 		}
 		return this._hostiles;
 	},
