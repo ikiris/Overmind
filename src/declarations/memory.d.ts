@@ -224,7 +224,8 @@ interface ExpansionData {
 interface RoomMemory {
 	[_MEM.EXPIRATION]?: number;
 	[_MEM.TICK]?: number;
-	[_RM.AVOID]?: boolean;
+	// booleans are automatically added/removed, strings contain a reason for manual avoidance.
+	[_RM.AVOID]?: boolean | string;
 	[_RM.SOURCES]?: SavedSource[];
 	[_RM.CONTROLLER]?: SavedController | undefined;
 	[_RM.PORTALS]?: SavedPortal[];
