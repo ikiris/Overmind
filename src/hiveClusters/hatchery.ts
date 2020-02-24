@@ -322,6 +322,7 @@ export class Hatchery extends HiveCluster {
 				this.productionPriorities.push(priority); // this is necessary because keys interpret number as string
 			}
 			this.productionQueue[priority].push({protoCreep: protoCreep, options: request.options});
+			log.debug(`spawn requested: ${request.priority} ${request.overlord.room} ${request.setup.role} ${request.overlord.name}`)
 		} else {
 			log.debug(`${this.room.print}: cannot spawn creep ${protoCreep.name} with body ` +
 					  `${JSON.stringify(protoCreep.body)}!`);
