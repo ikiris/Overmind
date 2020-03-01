@@ -263,6 +263,7 @@ export class Overseer implements IOverseer {
 		if (numRemotes < Colony.settings.remoteSourcesByLevel[colony.level]) {
 
 			const possibleOutposts = this.computePossibleOutposts(colony);
+			log.debug(`Colony ${colony.room.print} new outpost check: ${possibleOutposts.length}`)
 
 			const origin = colony.pos;
 			const bestOutpost = minBy(possibleOutposts, function(roomName) {

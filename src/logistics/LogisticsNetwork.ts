@@ -11,6 +11,7 @@ import {
 	isResource,
 	isStoreStructure,
 	isTombstone,
+	isRuin,
 	StoreStructure
 } from '../declarations/typeGuards';
 import {Mem} from '../memory/Memory';
@@ -26,6 +27,7 @@ export type LogisticsTarget =
 	| StructureNuker
 	| StructurePowerSpawn
 	| Tombstone
+	| Ruin
 	| Resource;
 
 export const ALL_RESOURCE_TYPE_ERROR =
@@ -258,6 +260,8 @@ export class LogisticsNetwork {
 			if (isResource(target)) {
 				return target.amount;
 			} else if (isTombstone(target)) {
+				return target.store[resourceType] || 0;
+			} else if (isRuin(target)) {
 				return target.store[resourceType] || 0;
 			} else if (isStoreStructure(target)) {
 				return target.store[resourceType] || 0;
@@ -621,6 +625,8 @@ export class LogisticsNetwork {
 				targetType = 'resource';
 			} else if (request.target instanceof Tombstone) {
 				targetType = 'tombstone';
+			} else if (request.target instanceof Ruin) {
+				targetType = 'ruin';
 			} else {
 				targetType = request.target.structureType;
 			}
@@ -629,13 +635,13 @@ export class LogisticsNetwork {
 				amount = request.target.amount;
 			} else {
 				if (request.resourceType == 'all') {
-					if (isTombstone(request.target) || isStoreStructure(request.target)) {
+					if (isTombstone(request.target) || isRuin(request.target) || isStoreStructure(request.target)) {
 						amount = _.sum(request.target.store);
 					} else if (isEnergyStructure(request.target)) {
 						amount = -0.001;
 					}
 				} else {
-					if (isTombstone(request.target) || isStoreStructure(request.target)) {
+					if (isTombstone(request.target) || isRuin(request.target) || isStoreStructure(request.target)) {
 						amount = request.target.store[request.resourceType] || 0;
 					} else if (isEnergyStructure(request.target)) {
 						amount = request.target.energy;

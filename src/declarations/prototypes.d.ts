@@ -61,6 +61,7 @@ interface Room {
 	flags: Flag[];
 	// Cached structures
 	tombstones: Tombstone[];
+	ruins: Ruin[];
 	drops: { [resourceType: string]: Resource[] };
 	droppedEnergy: Resource[];
 	droppedPower: Resource[];

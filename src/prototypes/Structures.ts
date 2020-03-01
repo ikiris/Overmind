@@ -201,3 +201,11 @@ Object.defineProperty(Tombstone.prototype, 'energy', {
 	configurable: true,
 });
 
+// Ruin prototypes ================================================================================================
+Object.defineProperty(Ruin.prototype, 'energy', {
+	get() {
+		return this.store[RESOURCE_ENERGY];
+	},
+	configurable: true,
+});
+
