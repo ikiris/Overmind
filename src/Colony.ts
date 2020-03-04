@@ -329,7 +329,7 @@ export class Colony {
 		$.set(this, 'rechargeables', () => _.flatten(_.map(this.rooms, room => room.rechargeables)));
 		$.set(this, 'constructionSites', () => _.flatten(_.map(this.rooms, room => room.constructionSites)), 10);
 		$.set(this, 'tombstones', () => _.flatten(_.map(this.rooms, room => room.tombstones)), 5);
-		$.set(this, 'ruins', () => _.flatten(_.map(this.rooms, room => room.ruins)), 10);
+		$.set(this, 'ruins', () => _.flatten(_.map(this.rooms, room => room.ruins)));
 		this.drops = _.merge(_.map(this.rooms, room => room.drops));
 		// Register assets
 		this.assets = this.getAllAssets();
@@ -344,7 +344,7 @@ export class Colony {
 				  'rechargeables');
 		$.set(this, 'constructionSites', () => _.flatten(_.map(this.rooms, room => room.constructionSites)), 10);
 		$.set(this, 'tombstones', () => _.flatten(_.map(this.rooms, room => room.tombstones)), 5);
-		$.set(this, 'ruins', () => _.flatten(_.map(this.rooms, room => room.ruins)), 10);
+		$.set(this, 'ruins', () => _.flatten(_.map(this.rooms, room => room.ruins)));
 		this.drops = _.merge(_.map(this.rooms, room => room.drops));
 		// Re-compute assets
 		this.assets = this.getAllAssets();

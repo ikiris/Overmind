@@ -170,7 +170,7 @@ export class LogisticsNetwork {
 			multiplier  : 1,
 			dAmountdt   : 0,
 		});
-		if (opts.resourceType == 'all' && (isStoreStructure(target) || isTombstone(target))) {
+		if (opts.resourceType == 'all' && (isStoreStructure(target) || isTombstone(target) || isRuin(target))) {
 			if (_.sum(target.store) == target.store.energy) {
 				opts.resourceType = RESOURCE_ENERGY; // convert "all" requests to energy if that's all they have
 			}
@@ -212,7 +212,7 @@ export class LogisticsNetwork {
 		// if (target instanceof DirectivePickup) {
 		// 	return target.storeCapacity - _.sum(target.store);
 		// } else
-		if (isResource(target) || isTombstone(target)) {
+		if (isResource(target) || isTombstone(target)|| isRuin(target)) {
 			log.error(`Improper logistics request: should not request input for resource or tombstone!`);
 			return 0;
 		} else if (isStoreStructure(target)) {
@@ -250,7 +250,7 @@ export class LogisticsNetwork {
 
 	private getOutputAmount(target: LogisticsTarget, resourceType: ResourceConstant | 'all'): number {
 		if (resourceType == 'all') {
-			if (isTombstone(target) || isStoreStructure(target)) {
+			if (isTombstone(target) || isStoreStructure(target) || isRuin(target)) {
 				return _.sum(target.store);
 			} else {
 				log.error(ALL_RESOURCE_TYPE_ERROR);
@@ -259,11 +259,7 @@ export class LogisticsNetwork {
 		} else {
 			if (isResource(target)) {
 				return target.amount;
-			} else if (isTombstone(target)) {
-				return target.store[resourceType] || 0;
-			} else if (isRuin(target)) {
-				return target.store[resourceType] || 0;
-			} else if (isStoreStructure(target)) {
+			} else if (isTombstone(target) || isRuin(target) || isStoreStructure(target)) {
 				return target.store[resourceType] || 0;
 			} else if (isEnergyStructure(target) && resourceType == RESOURCE_ENERGY) {
 				return target.energy;
@@ -365,7 +361,7 @@ export class LogisticsNetwork {
 					const resourceAmount = -1 * this.predictedRequestAmount(transporter, request, nextAvailability);
 					// ^ need to multiply amount by -1 since transporter is doing complement of what request needs
 					if (request.resourceType == 'all') {
-						if (!isStoreStructure(request.target) && !isTombstone(request.target)) {
+						if (!isStoreStructure(request.target) && !isTombstone(request.target) && !isRuin(request.target)) {
 							log.error(ALL_RESOURCE_TYPE_ERROR);
 							return {energy: 0};
 						}

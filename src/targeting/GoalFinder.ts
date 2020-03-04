@@ -23,7 +23,7 @@ const DEBUG = false;
 export class GoalFinder {
 
 	// Standard set of goals for fighting small groups of hostiles (not optimal for larger fights)
-	static skirmishGoals(creep: CombatZerg): { approach: PathFinderGoal[], avoid: PathFinderGoal[] } {
+	static skirmishGoals(creep: CombatZerg, includeStructures = false): { approach: PathFinderGoal[], avoid: PathFinderGoal[] } {
 
 		const approach: PathFinderGoal[] = [];
 		const avoid: PathFinderGoal[] = [];
@@ -71,7 +71,8 @@ export class GoalFinder {
 		}
 
 		// Generate list of targets to approach and respective ranges to keep them at
-		const approachTargets = hostileHealers.length > 0 ? hostileHealers : room.hostiles;
+		const roomhostiles = room.hostiles.length > 0 ? room.hostiles : room.hostileStructures;
+		const approachTargets = hostileHealers.length > 0 ? hostileHealers : roomhostiles;
 		for (const target of approachTargets) {
 			const data = analysis[target.id];
 			if (data && (data.advantage || braveMode)) {
@@ -81,6 +82,19 @@ export class GoalFinder {
 					avoid.push({pos: target.pos, range: range});
 				}
 				approach.push({pos: target.pos, range: range});
+			}
+		}
+
+		if (includeStructures) {
+			const approachStructures: Structure[] = [];
+			for (const structure of room.hostileStructures) {
+				approachStructures.push(structure);
+			}
+			for (const wall of room.walls) {
+				approachStructures.push(wall);
+			}
+			for (const approachStructure of approachStructures) {
+				approach.push({pos: approachStructure.pos, range: 1});
 			}
 		}
 

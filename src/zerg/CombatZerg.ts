@@ -193,7 +193,7 @@ export class CombatZerg extends Zerg {
 	/**
 	 * Navigate to a room, then engage hostile creeps there, perform medic actions, etc.
 	 */
-	autoSkirmish(roomName: string, verbose = false) {
+	autoSkirmish(roomName: string, verbose = false, includeStructures = false) {
 
 		// Do standard melee, ranged, and heal actions
 		if (this.getActiveBodyparts(ATTACK) > 0) {
@@ -219,7 +219,7 @@ export class CombatZerg extends Zerg {
 		}
 
 		// Skirmish within the room
-		const goals = GoalFinder.skirmishGoals(this);
+		const goals = GoalFinder.skirmishGoals(this, includeStructures);
 		this.debug(JSON.stringify(goals));
 		return Movement.combatMove(this, goals.approach, goals.avoid);
 

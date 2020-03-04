@@ -11,6 +11,7 @@ export const BuildPriorities: BuildableStructureConstant[] = [
 	STRUCTURE_LINK,
 	STRUCTURE_EXTRACTOR,
 	STRUCTURE_LAB,
+	STRUCTURE_FACTORY,
 	STRUCTURE_NUKER,
 	STRUCTURE_OBSERVER,
 	STRUCTURE_POWER_SPAWN,
@@ -45,6 +46,7 @@ export const AttackStructurePriorities: BuildableStructureConstant[] = [
 	STRUCTURE_EXTRACTOR,
 	STRUCTURE_POWER_SPAWN,
 	STRUCTURE_CONTAINER,
+	STRUCTURE_INVADER_CORE,
 	STRUCTURE_ROAD,
 	STRUCTURE_STORAGE,
 	STRUCTURE_TERMINAL,
@@ -73,6 +75,7 @@ export const DemolishStructurePriorities: {
 	{structureType: STRUCTURE_OBSERVER},
 	// {structureType: STRUCTURE_EXTRACTOR, maxRemoved: 1}, // skip extractor; doesn't need to be relocated
 	{structureType: STRUCTURE_POWER_SPAWN},
+	{structureType: STRUCTURE_INVADER_CORE},
 	// {structureType: STRUCTURE_ROAD}, // just let roads decay
 	{structureType: STRUCTURE_CONTAINER},
 	{structureType: STRUCTURE_STORAGE, maxRemoved: 1},

@@ -31,7 +31,7 @@ export class DirectiveOutpostDefense extends Directive {
 	}
 
 	init(): void {
-		const numHostiles: string = this.room ? this.room.hostiles.length.toString() : '???';
+		const numHostiles: string = this.room ? (this.room.hostiles.length + this.room.hostileStructures.length).toString() : '???';
 		this.alert(`Outpost defense (hostiles: ${numHostiles})`, NotifierPriority.High);
 	}
 
