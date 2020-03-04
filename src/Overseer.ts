@@ -164,7 +164,7 @@ export class Overseer implements IOverseer {
 			}
 		}
 		for (const ruin of colony.ruins) {
-			if (_.sum(ruin.store) > LogisticsNetwork.settings.droppedEnergyThreshold
+			if (_.sum(ruin.store) > 49
 				|| _.sum(ruin.store) > ruin.store.energy) {
 				if (colony.bunker && ruin.pos.isEqualTo(colony.bunker.anchor)) continue;
 				colony.logisticsNetwork.requestOutput(ruin, {resourceType: 'all'});

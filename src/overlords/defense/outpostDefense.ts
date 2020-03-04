@@ -60,7 +60,9 @@ export class OutpostDefenseOverlord extends CombatOverlord {
 	private computeNeededBroodlingAmount(setup: CreepSetup, enemyAttackPotential: number): number {
 		const broodlingPotential = setup.getBodyPotential(ATTACK, this.colony);
 		// let worstDamageMultiplier = CombatIntel.minimumDamageMultiplierForGroup(this.room.hostiles);
-		return Math.ceil(1.5 * enemyAttackPotential / broodlingPotential);
+		const request = Math.ceil(1.5 * enemyAttackPotential / broodlingPotential);
+		const hostilestructurevalue = (this.room && this.room.hostileStructures.length > 0) ? 1 : 0
+		return Math.max(request, hostilestructurevalue)
 	}
 
 	private computeNeededHealerAmount(setup: CreepSetup, enemyHealPotential: number): number {

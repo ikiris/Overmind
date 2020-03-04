@@ -35,7 +35,7 @@ export const FortifyPriorities: BuildableStructureConstant[] = [
 /**
  * Prioritized list of what order enemy structures should be attacked in
  */
-export const AttackStructurePriorities: BuildableStructureConstant[] = [
+export const AttackStructurePriorities: StructureConstant[] = [
 	STRUCTURE_SPAWN,
 	STRUCTURE_TOWER,
 	STRUCTURE_EXTENSION,
@@ -75,7 +75,6 @@ export const DemolishStructurePriorities: {
 	{structureType: STRUCTURE_OBSERVER},
 	// {structureType: STRUCTURE_EXTRACTOR, maxRemoved: 1}, // skip extractor; doesn't need to be relocated
 	{structureType: STRUCTURE_POWER_SPAWN},
-	{structureType: STRUCTURE_INVADER_CORE},
 	// {structureType: STRUCTURE_ROAD}, // just let roads decay
 	{structureType: STRUCTURE_CONTAINER},
 	{structureType: STRUCTURE_STORAGE, maxRemoved: 1},
