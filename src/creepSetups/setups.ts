@@ -229,6 +229,11 @@ export const CombatSetups = {
 			pattern  : [RANGED_ATTACK, MOVE],
 			sizeLimit: Infinity,
 		}),
+		
+		disuader: new CreepSetup(Roles.ranged, {
+			pattern  : [TOUGH, RANGED_ATTACK, MOVE, MOVE, HEAL, MOVE],
+			sizeLimit: 1,
+		}),
 
 		default: new CreepSetup(Roles.ranged, {
 			pattern  : [RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, MOVE, MOVE, MOVE, MOVE, HEAL],

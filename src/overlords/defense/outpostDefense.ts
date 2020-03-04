@@ -88,8 +88,12 @@ export class OutpostDefenseOverlord extends CombatOverlord {
 
 		const hydraliskSetup = mode == 'NORMAL' ? CombatSetups.hydralisks.default : CombatSetups.hydralisks.early;
 		const hydraliskAmount = this.computeNeededHydraliskAmount(hydraliskSetup, rangedAttack);
-		this.wishlist(hydraliskAmount, hydraliskSetup, {priority: this.priority - .2, reassignIdle: true});
-
+		if ((attack + rangedAttack) < 3 && mode == 'NORMAL') {
+			// This is probably just harassment
+			this.wishlist(Math.min(hydraliskAmount,1), CombatSetups.hydralisks.disuader, {priority: this.priority - .2, reassignIdle: true})
+		} else {
+			this.wishlist(hydraliskAmount, hydraliskSetup, {priority: this.priority - .2, reassignIdle: true});
+		}
 		const broodlingSetup = mode == 'NORMAL' ? CombatSetups.broodlings.default : CombatSetups.broodlings.early;
 		const broodlingAmount = this.computeNeededBroodlingAmount(broodlingSetup, attack);
 		this.wishlist(broodlingAmount, broodlingSetup, {priority: this.priority - .1, reassignIdle: true});
