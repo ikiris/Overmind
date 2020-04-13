@@ -1,4 +1,3 @@
-import {CombatCreepSetup} from '../creepSetups/CombatCreepSetup';
 import {Directive} from '../directives/Directive';
 import {SpawnGroup} from '../logistics/SpawnGroup';
 import {profile} from '../profiler/decorator';
@@ -42,6 +41,9 @@ export abstract class CombatOverlord extends Overlord {
 	// Standard sequence of actions for running combat creeps
 	autoRun(roleCreeps: CombatZerg[], creepHandler: (creep: CombatZerg) => void) {
 		for (const creep of roleCreeps) {
+			if (creep.spawning) {
+				return;
+			}
 			if (creep.hasValidTask) {
 				creep.run();
 			} else {
