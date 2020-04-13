@@ -66,7 +66,7 @@ export interface PathOptions {
 	modifyRoomCallback?: (r: Room, m: CostMatrix) => CostMatrix; // modifications to default cost matrix calculations
 }
 
-export const defaultPathOptions: PathOptions = {
+export const getDefaultPathOptions: () => PathOptions = () => ({
 	range               : 1,
 	terrainCosts        : {plainCost: 1, swampCost: 5},
 	ignoreCreeps        : true,
@@ -77,7 +77,7 @@ export const defaultPathOptions: PathOptions = {
 	usePortalThreshold  : 10,
 	portalsMustBeInRange: 6,
 	ensurePath          : false,
-};
+});
 
 
 /**
@@ -118,9 +118,7 @@ export class Pathing {
 	 */
 	static findPath(origin: RoomPosition, destination: RoomPosition, opts: PathOptions = {}): PathingReturn {
 
-		_.defaults(opts, defaultPathOptions);
-
-		const originalDestination = destination;
+		_.defaults(opts, getDefaultPathOptions());
 
 		// check to see whether findRoute should be used
 		const linearDistance = Game.map.getRoomLinearDistance(origin.roomName, destination.roomName);
@@ -207,12 +205,12 @@ export class Pathing {
 			// options.allowedRooms and options.routeCallback can also be used to handle this situation
 			const useRoute = this.findRoute(origin.roomName, destination.roomName, opts);
 			if (useRoute != ERR_NO_PATH) {
-				log.warning(`Pathing: findPath from ${origin.print} to ${originalDestination.print} failed without ` +
+				log.warning(`Pathing: findPath from ${origin.print} to ${destination.print} failed without ` +
 							`specified route. Trying again with route: ${JSON.stringify(useRoute)}.`);
 				opts.route = useRoute;
 				ret = this.findPath(origin, destination, opts);
 				if (ret.incomplete) {
-					log.error(`Pathing: second attempt from ${origin.print} to ${originalDestination.print} ` +
+					log.error(`Pathing: second attempt from ${origin.print} to ${destination.print} ` +
 							  `was unsuccessful!`);
 				}
 			} else {
@@ -236,7 +234,7 @@ export class Pathing {
 	 */
 	static findRoute(origin: string, destination: string, opts: PathOptions = {}): Route | ERR_NO_PATH {
 
-		_.defaults(opts, defaultPathOptions);
+		_.defaults(opts, getDefaultPathOptions());
 
 		const linearDistance = Game.map.getRoomLinearDistance(origin, destination);
 		const maxRooms = opts.maxRooms || linearDistance + 10;
@@ -282,23 +280,18 @@ export class Pathing {
 			// Narrow down a list of portal rooms that could possibly lead to the destination
 			const validPortalRooms = _.filter(RoomIntel.memory.portalRooms, roomName => {
 				// Is the first leg of the trip too far?
-				// if (origin == 'E26S47') console.log(roomName);
 				const originToPortal = Game.map.getRoomLinearDistance(origin, roomName);
-				// if (origin == 'E26S47') console.log('originToPortal', originToPortal);
 				if (originToPortal > opts.maxRooms!) return false;
 				if (opts.portalsMustBeInRange && originToPortal > opts.portalsMustBeInRange) return false;
 
 				// Are there intra-shard portals here?
 				const bestPortalDestination = getBestPortalDestination(roomName);
-				// if (origin == 'E26S47') console.log('bestPortalDestination', bestPortalDestination);
 				if (!bestPortalDestination) return false;
 
 				// Is the first + second leg of the trip too far?
 				const portalToDestination = Game.map.getRoomLinearDistance(destination, bestPortalDestination);
-				// if (origin == 'E26S47') console.log('portalToDestination', portalToDestination);
 				return originToPortal + portalToDestination <= opts.maxRooms!;
 			});
-			// if (origin == 'E26S47') console.log('valid portals:', print(validPortalRooms));
 
 			// Figure out which portal room is the best one to use
 			const portalCallback = (roomName: string) => {
@@ -315,14 +308,11 @@ export class Pathing {
 				const bestPortalDestination = getBestPortalDestination(portalRoom) as string; // room def has portal
 				const originToPortalRoute = Game.map.findRoute(origin, portalRoom,
 															   {routeCallback: portalCallback});
-				// if (origin == 'E26S47') console.log(`origin to portal route from ${origin} to ${portalRoom}`, print(originToPortalRoute));
 				const portalToDestinationRoute = Game.map.findRoute(bestPortalDestination, destination,
 																	{routeCallback: portalCallback});
-				// if (origin == 'E26S47') console.log(`portal to destination route from ${bestPortalDestination} to ${destination}`, print(portalToDestinationRoute));
 				if (originToPortalRoute != ERR_NO_PATH && portalToDestinationRoute != ERR_NO_PATH) {
 					const portalRouteLength = originToPortalRoute.length + portalToDestinationRoute.length;
 					const directRouteLength = route != ERR_NO_PATH ? route.length : Infinity;
-					// if (origin == 'E26S47') console.log('portal route length', print(portalRouteLength));
 					if (portalRouteLength < directRouteLength) {
 						return portalRouteLength;
 					} else {
@@ -333,22 +323,20 @@ export class Pathing {
 				}
 			});
 
-			if (origin == 'E26S47') console.log('best portal room', print(bestPortalRoom));
-
 			if (bestPortalRoom) {
 				const portalDest = getBestPortalDestination(bestPortalRoom) as string;
 				const originToPortalRoute = Game.map.findRoute(origin, bestPortalRoom,
 															   {routeCallback: portalCallback});
 				const portalToDestinationRoute = Game.map.findRoute(portalDest, destination,
 																	{routeCallback: portalCallback});
-				// if (origin == 'E26S47') console.log(print(originToPortalRoute));
-				// if (origin == 'E26S47') console.log(print(portalToDestinationRoute));
 				// This will always be true but gotta check so TS doesn't complain...
 				if (originToPortalRoute != ERR_NO_PATH && portalToDestinationRoute != ERR_NO_PATH) {
 					route = [...originToPortalRoute,
 							 {exit: FIND_EXIT_PORTAL, room: portalDest},
 							 ...portalToDestinationRoute];
-					if (origin == 'E26S47') console.log('PORTAL ROUTE:', print(route));
+
+					// if (origin == 'E26S47') console.log('PORTAL ROUTE:', print(route));
+
 				}
 
 			}
@@ -544,14 +532,15 @@ export class Pathing {
 	 */
 	static getCostMatrix(room: Room, options: PathOptions, clone = true): CostMatrix {
 		let matrix: CostMatrix;
-		if (options.ignoreCreeps == false) {
-			matrix = this.getCreepMatrix(room);
-		} else if (options.avoidSK) {
+		if (options.avoidSK) {
 			matrix = this.getSkMatrix(room);
 		} else if (options.ignoreStructures) {
 			matrix = new PathFinder.CostMatrix();
 		} else {
 			matrix = this.getDefaultMatrix(room);
+		}
+		if (options.ignoreCreeps == false) {
+			matrix = this.getCreepMatrix(room, matrix);
 		}
 		// Register other obstacles
 		if (options.obstacles && options.obstacles.length > 0) {
@@ -615,14 +604,20 @@ export class Pathing {
 				_.forEach(portals, portal => matrix!.set(portal.pos.x, portal.pos.y, PORTAL_COST));
 				const skLairs = roomInfo.skLairs;
 				const avoidRange = 5;
-				_.forEach(skLairs, lair => {
-					for (let dx = -avoidRange; dx <= avoidRange; dx++) {
-						for (let dy = -avoidRange; dy <= avoidRange; dy++) {
-							const cost = SK_COST * (avoidRange - Math.max(Math.abs(dx), Math.abs(dy)));
-							matrix!.set(lair.pos.x + dx, lair.pos.y + dy, cost);
+				if (skLairs.length > 0) {
+					// The source keepers usually hang out by the closest mineral or source but sometimes on lair
+					const blockThese = _.compact([...roomInfo.sources,
+												  roomInfo.mineral,
+												  ...roomInfo.skLairs]) as HasPos[];
+					_.forEach(blockThese, thing => {
+						for (let dx = -avoidRange; dx <= avoidRange; dx++) {
+							for (let dy = -avoidRange; dy <= avoidRange; dy++) {
+								const cost = SK_COST * (avoidRange + 1 - Math.max(Math.abs(dx), Math.abs(dy)));
+								matrix!.set(thing.pos.x + dx, thing.pos.y + dy, cost);
+							}
 						}
-					}
-				});
+					});
+				}
 			}
 		}
 		// Register other obstacles
@@ -743,7 +738,13 @@ export class Pathing {
 		if (room._creepMatrix) {
 			return room._creepMatrix;
 		}
-		const matrix = this.getDefaultMatrix(room).clone();
+		let matrix: CostMatrix;
+		if (fromMatrix) {
+			matrix = fromMatrix.clone();
+			_.forEach(room.find(FIND_CREEPS), c => matrix.set(c.pos.x, c.pos.y, CREEP_COST));
+			return matrix;
+		}
+		matrix = this.getDefaultMatrix(room).clone();
 		_.forEach(room.find(FIND_CREEPS), c => matrix.set(c.pos.x, c.pos.y, CREEP_COST)); // don't block off entirely
 		room._creepMatrix = matrix;
 		return room._creepMatrix;
@@ -789,14 +790,26 @@ export class Pathing {
 		}
 		return $.costMatrix(room.name, MatrixTypes.sk, () => {
 			const matrix = this.getDefaultMatrix(room).clone();
-			const avoidRange = 6;
-			_.forEach(room.keeperLairs, lair => {
-				for (let dx = -avoidRange; dx <= avoidRange; dx++) {
-					for (let dy = -avoidRange; dy <= avoidRange; dy++) {
-						matrix.set(lair.pos.x + dx, lair.pos.y + dy, 0xfe);
+			const avoidRange = 5;
+			if (room.keeperLairs.length > 0) {
+				const blockThese = _.compact([...room.sources, room.mineral, ...room.keeperLairs]) as HasPos[];
+				_.forEach(blockThese, thing => {
+					for (let dx = -avoidRange; dx <= avoidRange; dx++) {
+						for (let dy = -avoidRange; dy <= avoidRange; dy++) {
+							const cost = SK_COST / 5 * (avoidRange + 1 - Math.max(Math.abs(dx), Math.abs(dy)));
+							matrix!.set(thing.pos.x + dx, thing.pos.y + dy, cost);
+						}
 					}
-				}
-			});
+				});
+				_.forEach(room.sourceKeepers, sourceKeeper => {
+					for (let dx = -avoidRange; dx <= avoidRange; dx++) {
+						for (let dy = -avoidRange; dy <= avoidRange; dy++) {
+							const cost = SK_COST * 2 * (avoidRange + 1 - Math.max(Math.abs(dx), Math.abs(dy)));
+							matrix!.set(sourceKeeper.pos.x + dx, sourceKeeper.pos.y + dy, cost);
+						}
+					}
+				});
+			}
 			return matrix;
 		});
 	}
