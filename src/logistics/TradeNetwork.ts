@@ -408,6 +408,9 @@ export class TraderJoe implements ITradeNetwork {
 			// Average distance between any two rooms is 25 since the map wraps, which has 56% transaction price, so
 			// energy is 44% what is is normally. This is a bit pessimistic, so let's bump it to 55%, which currently
 			// is what computeCompetitivePrice(sell, energy) is telling me it should be around...
+			if (this.memory.cache.history.energy.avg14 === undefined) {
+				return Infinity;
+			}
 			const energyPriceGuess = 0.55 * this.memory.cache.history.energy.avg14;
 			const energyToCreditMultiplier = Math.min(energyPriceGuess, 0.1);
 			return transferCost * energyToCreditMultiplier;
