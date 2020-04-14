@@ -535,7 +535,7 @@ export class TraderJoe implements ITradeNetwork {
 
 		// This is all somewhat expensive so only do this occasionally
 		if (!this.ordersProcessedThisTick()) {
-			return OK; // No action needed on these ticks; we'll pretend this works OK
+			return OK; // No action needed on these ticks
 		}
 		// Cap the amount based on the maximum you can make a buy/sell order with
 		if (type == ORDER_SELL) {
@@ -589,19 +589,6 @@ export class TraderJoe implements ITradeNetwork {
 		}
 		// Create a new order
 		else {
-			// Put a cap on the number of orders you can create per tick
-			if (this.ordersPlacedThisTick > TraderJoe.settings.market.orders.maxOrdersPlacedPerTick) {
-				return NO_ACTION;
-			}
-
-			// Only place up to a certain amount of orders
-			const existingOrdersForThis = this.getExistingOrders(type, resource);
-			if (existingOrdersForThis.length > TraderJoe.settings.market.orders.maxOrdersForResource) {
-				this.notify(`${printRoomName(terminal.room.name, true)}: could not create ${type} order for ` +
-							`${Math.round(amount)} ${resource} - too many existing!`);
-				return ERR_TOO_MANY_ORDERS_OF_TYPE;
-			}
-
 			// Compute the buy or sell price
 			const price = +this.computeCompetitivePrice(type, resource, terminal.room.name)
 							   .toFixed(3); // market only allows for 3 decimal places of precision
@@ -617,32 +604,43 @@ export class TraderJoe implements ITradeNetwork {
 				amount = amount * Game.market.credits / brokersFee * 0.9;
 			}
 
-			// Create the order
-			const params = {
-				type        : type,
-				resourceType: resource,
-				price       : price,
-				totalAmount : amount,
-				roomName    : terminal.room.name
-			};
-			const ret = Game.market.createOrder(params);
-			let msg = '';
-			if (type == ORDER_BUY) {
-				msg += `${printRoomName(terminal.room.name, true)} creating buy order:  ` +
-					   `${Math.round(amount)} ${resource} at price ${price.toFixed(4)}`;
-			} else {
-				msg += `${printRoomName(terminal.room.name, true)} creating sell order: ` +
-					   `${Math.round(amount)} ${resource} at price ${price.toFixed(4)}`;
+			// Put a cap on the number of orders you can create per tick
+			if (this.ordersPlacedThisTick > TraderJoe.settings.market.orders.maxOrdersPlacedPerTick) {
+				return NO_ACTION;
 			}
-			if (ret == OK) {
-				this.ordersPlacedThisTick++;
-			} else {
-				msg += ` ERROR: ${ret}`;
-			}
-			this.debug(msg);
-			this.notify(msg);
-			return ret;
 
+			// Only place up to a certain amount of orders
+			const existingOrdersForThis = this.getExistingOrders(type, resource);
+			if (existingOrdersForThis.length < TraderJoe.settings.market.orders.maxOrdersForResource) {
+				const params = {
+					type        : type,
+					resourceType: resource,
+					price       : price,
+					totalAmount : amount,
+					roomName    : terminal.room.name
+				};
+				const ret = Game.market.createOrder(params);
+				let msg = '';
+				if (type == ORDER_BUY) {
+					msg += `${printRoomName(terminal.room.name, true)} creating buy order:  ` +
+						   `${Math.round(amount)} ${resource} at price ${price.toFixed(4)}`;
+				} else {
+					msg += `${printRoomName(terminal.room.name, true)} creating sell order: ` +
+						   `${Math.round(amount)} ${resource} at price ${price.toFixed(4)}`;
+				}
+				if (ret == OK) {
+					this.ordersPlacedThisTick++;
+				} else {
+					msg += ` ERROR: ${ret}`;
+				}
+				this.debug(msg);
+				this.notify(msg);
+				return ret;
+			} else {
+				this.notify(`${printRoomName(terminal.room.name, true)}: could not create ${type} order for ` +
+							`${Math.round(amount)} ${resource} - too many existing!`);
+				return ERR_TOO_MANY_ORDERS_OF_TYPE;
+			}
 		}
 
 	}

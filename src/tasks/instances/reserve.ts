@@ -23,9 +23,6 @@ export class TaskReserve extends Task {
 	}
 
 	work() {
-		if (this.target != null && !!this.target.reservation && !this.target.reservedByMe) {
-			this.creep.attackController(this.target);
-		}
 		return this.creep.reserveController(this.target);
 	}
 }

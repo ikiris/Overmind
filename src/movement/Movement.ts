@@ -1195,10 +1195,10 @@ export class Movement {
 	 * Flee from avoid goals in the room while not re-pathing every tick like kite() does.
 	 */
 	static flee(creep: AnyZerg, avoidGoals: (RoomPosition | HasPos)[],
-				dropEnergy = false, opts: MoveOptions = {}): boolean {
+				dropEnergy = false, opts: MoveOptions = {}): number | undefined {
 
 		if (avoidGoals.length == 0) {
-			return false; // nothing to flee from
+			return; // nothing to flee from
 		}
 		const terrainCosts = isPowerZerg(creep) ? {plainCost: 1, swampCost: 1} : getTerrainCosts((<Creep>creep.creep));
 		const fleeDefaultOpts: MoveOptions = {pathOpts: {terrainCosts: terrainCosts}};
@@ -1216,12 +1216,11 @@ export class Movement {
 		if (rangeToClosest > opts.fleeRange) { // Out of range of baddies
 
 			if (!creep.memory._go) {
-				return false;
+				return;
 			}
 
 			if (creep.pos.isEdge) {
-				creep.moveOffExit();
-				return true;
+				return creep.moveOffExit();
 			}
 
 			// wait until safe
@@ -1230,15 +1229,14 @@ export class Movement {
 				if (moveData.fleeWait <= 0) {
 					// you're safe now
 					delete creep.memory._go;
-					return false;
+					return;
 				} else {
-					// wait longer!
 					moveData.fleeWait--;
-					return true;
+					return NO_ACTION;
 				}
 			} else {
 				// you're safe
-				return false;
+				return;
 			}
 
 		} else { // Still need to run away
@@ -1249,7 +1247,7 @@ export class Movement {
 			}
 			const moveData = creep.memory._go as MoveData;
 
-			moveData.fleeWait = 5;
+			moveData.fleeWait = 2;
 
 			// Invalidate path if needed
 			if (moveData.path) {
@@ -1271,15 +1269,14 @@ export class Movement {
 			if (!moveData.path || !moveData.destination) {
 				const ret = Pathing.findFleePath(creep.pos, avoidGoals, opts.pathOpts || {});
 				if (ret.path.length == 0) {
-					return false;
+					return NO_ACTION;
 				}
 				moveData.destination = _.last(ret.path);
 				moveData.path = Pathing.serializePath(creep.pos, ret.path, 'purple');
 			}
 
 			// Call goTo to the final position in path
-			Movement.goTo(creep, derefRoomPosition(moveData.destination), opts);
-			return true;
+			return Movement.goTo(creep, derefRoomPosition(moveData.destination), opts);
 		}
 	}
 
