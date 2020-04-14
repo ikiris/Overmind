@@ -297,7 +297,7 @@ interface RoomMemory {
 	spawnGroup?: any;
 	[MEM.EXPIRATION]?: number;
 	[MEM.TICK]?: number;
-	[RMEM.AVOID]?: boolean;
+	[RMEM.AVOID]?: boolean | false;
 	[RMEM.ROOM_STATUS]?: RoomStatusCompressed;
 	[RMEM.SOURCES]?: SavedSource[];
 	[RMEM.CONTROLLER]?: SavedController;
