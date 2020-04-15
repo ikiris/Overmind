@@ -285,7 +285,7 @@ export class Overseer implements IOverseer {
 
 		const roomType = Cartographer.roomType(room.name);
 
-		if (powerSetting.enabled && (roomType == ROOMTYPE_ALLEY || roomType == ROOMTYPE_CROSSROAD)) {
+		if (roomType == ROOMTYPE_ALLEY || roomType == ROOMTYPE_CROSSROAD) {
 
 			const powerBank = _.first(room.powerBanks);
 			if (powerBank && powerBank.ticksToDecay > 4000 && powerBank.power >= powerSetting.minPower) {
@@ -417,7 +417,7 @@ export class Overseer implements IOverseer {
 
 		_.forEach(allColonies, colony => this.handleNukeResponse(colony));
 
-		if (Memory.settings.powerCollection.enabled && Game.cpu.bucket > 6000) {
+		if (Memory.settings.powerCollection.enabled && Game.time % 25 == 13 && Game.cpu.bucket > 6000) {
 			_.forEach(allRooms, room => this.handlePowerMining(room));
 		}
 
