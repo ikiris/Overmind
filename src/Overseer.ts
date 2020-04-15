@@ -468,10 +468,6 @@ export class Overseer implements IOverseer {
 	// Safe mode condition =============================================================================================
 
 	private handleSafeMode(colony: Colony): void {
-		if (colony.stage == ColonyStage.Larva && onPublicServer()) {
-			return;
-		}
-		// Safe mode activates when there are dangerous player hostiles that can reach the spawn
 		const criticalStructures = _.compact([...colony.spawns,
 											  colony.storage,
 											  colony.terminal]) as Structure[];
@@ -488,6 +484,10 @@ export class Overseer implements IOverseer {
 				}
 			}
 		}
+		if (colony.stage == ColonyStage.Larva && onPublicServer()) {
+			return;
+		}
+		// Safe mode activates when there are dangerous player hostiles that can reach the spawn
 		const firstHostile = _.first(colony.room.dangerousPlayerHostiles);
 		if (firstHostile && colony.spawns[0]) {
 			const barriers = _.map(colony.room.barriers, barrier => barrier.pos);
