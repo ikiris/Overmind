@@ -7,6 +7,8 @@ export const ROOMTYPE_CONTROLLER = 'CTRL';
 export const ROOMTYPE_ALLEY = 'ALLEY';
 export const ROOMTYPE_CROSSROAD = 'CROSSROAD';
 
+export type RoomType = 'SK' | 'CORE' | 'CTRL' | 'ALLEY' | 'CROSSROAD';
+
 /**
  * Cartographer: provides helper methods related to Game.map. A few of these methods have been modified from BonzAI
  * codebase, although I have introduced new methods of my own over time as well.
@@ -15,14 +17,14 @@ export const ROOMTYPE_CROSSROAD = 'CROSSROAD';
 export class Cartographer {
 
 	/**
-	 * Lists all rooms up to a given distance away, including roomName
+	 * Lists all rooms up to and including a given distance away, including roomName
 	 */
 	static findRoomsInRange(roomName: string, depth: number): string[] {
 		return _.flatten(_.values(this.recursiveRoomSearch(roomName, depth)));
 	}
 
 	/**
-	 * Lists all rooms up at a given distance away, including roomName
+	 * Lists all rooms at exactly a given distance away, including roomName
 	 */
 	static findRoomsAtRange(roomName: string, depth: number): string[] {
 		return this.recursiveRoomSearch(roomName, depth)[depth];
@@ -87,6 +89,7 @@ export class Cartographer {
 			}
 			PERMACACHE.cartographerRoomTypes[roomName] = roomType;
 		}
+		return PERMACACHE.cartographerRoomTypes[roomName];
 	}
 
 	/**
