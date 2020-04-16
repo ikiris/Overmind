@@ -290,7 +290,7 @@ export class Overseer implements IOverseer {
 
 		const roomType = Cartographer.roomType(room.name);
 
-		if (roomType == ROOMTYPE_ALLEY || roomType == ROOMTYPE_CROSSROAD) {
+		if (powerSetting.enabled && (roomType == ROOMTYPE_ALLEY || roomType == ROOMTYPE_CROSSROAD)) {
 
 			const powerBank = _.first(room.powerBanks);
 			if (powerBank && powerBank.ticksToDecay > 4000 && powerBank.power >= powerSetting.minPower) {
