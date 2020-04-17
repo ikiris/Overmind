@@ -48,10 +48,9 @@ Object.defineProperty(Creep.prototype, 'inRampart', {
 });
 
 // Permanently cached properties
-
+PERMACACHE.bodypartCounts = PERMACACHE.bodypartCounts || {};
 Object.defineProperty(Creep.prototype, 'bodypartCounts', {
 	get() {
-		PERMACACHE.bodypartCounts = PERMACACHE.bodypartCounts || {};
 		if (PERMACACHE.bodypartCounts[this.id] === undefined) {
 			PERMACACHE.bodypartCounts[this.id] = _.countBy(this.body, (part: BodyPartDefinition) => part.type);
 			_.defaults(PERMACACHE.bodypartCounts[this.id], {
@@ -70,9 +69,9 @@ Object.defineProperty(Creep.prototype, 'bodypartCounts', {
 	configurable: true,
 });
 
+PERMACACHE.isPlayer = PERMACACHE.isPlayer || {};
 Object.defineProperty(Creep.prototype, 'isPlayer', {
 	get() {
-		PERMACACHE.isPlayer = PERMACACHE.isPlayer || {};
 		if (PERMACACHE.isPlayer[this.id] === undefined) {
 			PERMACACHE.isPlayer[this.id] = this.owner.username != 'Invader' &&
 										  this.owner.username != 'Source Keeper' &&

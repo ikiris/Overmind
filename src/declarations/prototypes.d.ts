@@ -18,6 +18,10 @@ interface PowerCreep {
 	withdraw(target: Structure | Tombstone | Ruin, resourceType: ResourceConstant, amount?: number): ScreepsReturnCode;
 }
 
+interface CostMatrix {
+	_bits: Uint8Array;
+}
+
 interface ConstructionSite {
 	isWalkable: boolean;
 }
