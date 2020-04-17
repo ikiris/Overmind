@@ -293,7 +293,7 @@ export class Overseer implements IOverseer {
 		if (Game.time % Overseer.settings.outpostCheckFrequency == 37 && powerSetting.enabled && (roomType == ROOMTYPE_ALLEY || roomType == ROOMTYPE_CROSSROAD)) {
 
 			const powerBank = _.first(room.powerBanks);
-			if (powerBank && powerBank.ticksToDecay > 3000 && powerBank.power >= powerSetting.minPower) {
+			if (powerBank && powerBank.ticksToDecay > 4000 && powerBank.power >= powerSetting.minPower) {
 
 				if (DirectivePowerMine.isPresent(powerBank.pos, 'pos')) {
 					return;
