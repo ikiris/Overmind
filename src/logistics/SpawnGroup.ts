@@ -6,6 +6,9 @@ import {Mem} from '../memory/Memory';
 import {Pathing} from '../movement/Pathing';
 import {profile} from '../profiler/decorator';
 import {getCacheExpiration, minBy, onPublicServer} from '../utilities/utils';
+// ESM
+// @ts-ignore
+import {parse, stringify} from 'flatted/esm';
 
 interface SpawnGroupMemory {
 	colonies: string[];
@@ -29,7 +32,7 @@ const MAX_LINEAR_DISTANCE = 10; // maximum linear distance to search for ANY spa
 const DEFAULT_RECACHE_TIME = onPublicServer() ? 2000 : 1000;
 
 const defaultSettings: SpawnGroupSettings = {
-	maxPathDistance   : 4 * 50,		// override default path distance
+	maxPathDistance   : 6 * 50,		// override default path distance
 	requiredRCL       : 7,
 	maxLevelDifference: 0,
 	// flexibleEnergy    : true,
@@ -161,11 +164,15 @@ export class SpawnGroup {
 		const hatcheries = _.compact(_.map(colonies, colony => colony.hatchery)) as Hatchery[];
 		const distanceTo = (hatchery: Hatchery) => this.memory.distances[hatchery.pos.roomName] + 25;
 
+		log.debug(`spawngroup ${this.roomName} ${this.ref} colonies: ${colonies}`);
+		//log.debug(`spawngroup hatcheries: ${hatcheries}`);
 		// Enqueue each requests to the hatchery with least expected wait time, which is updated after each enqueue
 		for (const request of this.requests) {
 			// const maxCost = bodyCost(request.setup.generateBody(this.energyCapacityAvailable));
 			// const okHatcheries = _.filter(hatcheries,
 			// 							  hatchery => hatchery.room.energyCapacityAvailable >= maxCost);
+			//log.debug(`request : ${stringify(request)}`);
+			//log.debug(`hatcheries : ${stringify(hatcheries)}`);
 			const bestHatchery = minBy(hatcheries, hatchery => hatchery.getWaitTimeForPriority(request.priority) +
 															   distanceTo(hatchery));
 			if (bestHatchery) {
