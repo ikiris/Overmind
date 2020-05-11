@@ -527,7 +527,7 @@ export class Overseer implements IOverseer {
 											  colony.terminal]) as Structure[];
 		for (const structure of criticalStructures) {
 			if (structure.hits < structure.hitsMax &&
-				structure.pos.findInRange(colony.room.dangerousPlayerHostiles, 2).length > 0) {
+				structure.pos.findInRange(colony.room.dangerousPlayerHostiles, 3).length > 0) {
 				const ret = colony.controller.activateSafeMode();
 				if (ret != OK && !colony.controller.safeMode) {
 					if (colony.terminal) {
