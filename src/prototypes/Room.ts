@@ -142,7 +142,14 @@ Object.defineProperty(Room.prototype, 'dangerousHostiles', {
 
 Object.defineProperty(Room.prototype, 'dangerousPlayerHostiles', {
 	get() {
-		if (!this._dangerousPlayerHostiles) {
+		if (this.threatLevel > 0.25) {
+			this._dangerousPlayerHostiles = this.find(FIND_HOSTILE_CREEPS, {filter: (creep: Creep) => creep.isHuman
+			&& !isAlly(creep.owner.username)
+			&& (creep.getActiveBodyparts(ATTACK) > 0
+																	 || creep.getActiveBodyparts(RANGED_ATTACK) > 0
+																	 || creep.getActiveBodyparts(WORK) > 0)
+			});
+		} else if (!this._dangerousPlayerHostiles) {
 			if (this.my) {
 				this._dangerousPlayerHostiles = _.filter(this.playerHostiles,
 												   (creep: Creep) => creep.getActiveBodyparts(ATTACK) > 0
