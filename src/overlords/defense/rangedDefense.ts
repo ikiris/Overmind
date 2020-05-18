@@ -6,6 +6,7 @@ import {OverlordPriority} from '../../priorities/priorities_overlords';
 import {profile} from '../../profiler/decorator';
 import {CombatZerg} from '../../zerg/CombatZerg';
 import {CombatOverlord} from '../CombatOverlord';
+import {log} from '../../console/log';
 
 /**
  * Spawns ranged defenders to defend against incoming player invasions in an owned room
@@ -63,8 +64,10 @@ export class RangedDefenseOverlord extends CombatOverlord {
 		} else {
 			const {attack, ranged, heal} = CombatIntel.getCombatPotentials(this.room.hostiles);
 			// if there's a lot of big baddies or this assault has lasted a long time, pull out the boosts
-			if (attack + ranged + heal > 100 || this.age > 1000) {
-				setup = CombatSetups.hydralisks.boosted.default;
+			const threatv = attack + ranged + heal
+			if (threatv > 100 || this.age > 1000) {
+				log.info(`[this.] armor up: combat rating ${threatv} age ${this.age}`)
+				setup = CombatSetups.hydralisks.boosted.armored;
 			}
 		}
 
