@@ -32,6 +32,9 @@ export class UpgradingOverlord extends Overlord {
 		if (this.colony.assets.energy > UpgradeSite.settings.energyBuffer
 			|| this.upgradeSite.controller.ticksToDowngrade < 500) {
 			let setup = Setups.upgraders.default;
+			if (this.colony.level > 5 && this.colony.labs.length > 0) {
+				setup = Setups.upgraders.boosted
+			}
 			if (this.colony.level == 8) {
 				setup = Setups.upgraders.rcl8;
 				if (this.colony.labs.length == 10 &&
