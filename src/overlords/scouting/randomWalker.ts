@@ -5,6 +5,7 @@ import {profile} from '../../profiler/decorator';
 import {Tasks} from '../../tasks/Tasks';
 import {Zerg} from '../../zerg/Zerg';
 import {Overlord} from '../Overlord';
+import {RoomIntel} from '../../intel/RoomIntel'
 
 const DEFAULT_NUM_SCOUTS = 3;
 
@@ -40,7 +41,7 @@ export class RandomWalkerScoutOverlord extends Overlord {
 			// Pick a new room
 			const neighboringRooms = _.values(Game.map.describeExits(scout.pos.roomName)) as string[];
 			const roomName = _.sample(neighboringRooms);
-			if (Game.map.isRoomAvailable(roomName)) {
+			if (RoomIntel.getRoomStatus(roomName) == RoomIntel.getRoomStatus(this.colony.room.name)) {
 				scout.task = Tasks.goToRoom(roomName);
 			}
 		}
