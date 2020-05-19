@@ -801,7 +801,7 @@ export class RoomIntel {
 			new Date().getTime() > new Date(Memory.rooms[roomName][RMEM.ROOM_STATUS]![1] * 1000).getTime()) {
 			let {status, timestamp} = Game.map.getRoomStatus(roomName);
 			if (timestamp == null) { // null timestamp means indefinite, but not really; let's recheck in a few days
-				const extraMilliseconds = 3 * 24 * 60 * 60 * 1000; // check again in 3 days
+				const extraMilliseconds = 1 * 24 * 60 * 60 * 1000; // check again in 3 days
 				timestamp = new Date().getTime() + extraMilliseconds;
 			}
 			timestamp = Math.floor(timestamp / 1000); // don't need milliseconds; seconds will do
