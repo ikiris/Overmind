@@ -111,6 +111,8 @@ export class UpgradeSite extends HiveCluster {
 					upgradePower = this.memory.speedFactor != undefined ? upgradePower * this.memory.speedFactor : upgradePower;
 				}
 				return upgradePower;
+			} else if (this.colony.state.isIncubating) {
+				return Math.min(5);
 			} else {
 				return 0;
 			}

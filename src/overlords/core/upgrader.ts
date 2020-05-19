@@ -30,7 +30,8 @@ export class UpgradingOverlord extends Overlord {
 			return;
 		}
 		if (this.colony.assets.energy > UpgradeSite.settings.energyBuffer
-			|| this.upgradeSite.controller.ticksToDowngrade < 500) {
+			|| this.upgradeSite.controller.ticksToDowngrade < 500
+			|| this.colony.state.isIncubating) {
 			let setup = Setups.upgraders.default;
 			if (this.colony.level == 8) {
 				setup = Setups.upgraders.rcl8;
@@ -38,13 +39,16 @@ export class UpgradingOverlord extends Overlord {
 					this.colony.assets[RESOURCE_CATALYZED_GHODIUM_ACID] >= 4 * LAB_BOOST_MINERAL) {
 					setup = Setups.upgraders.rcl8_boosted;
 				}
-			}
-
-			if (this.colony.level == 8) {
 				this.wishlist(1, setup);
 			} else {
 				const upgradePowerEach = setup.getBodyPotential(WORK, this.colony);
-				const upgradersNeeded = Math.ceil(this.upgradeSite.upgradePowerNeeded / upgradePowerEach);
+				let upgradersNeeded = Math.ceil(this.upgradeSite.upgradePowerNeeded / upgradePowerEach);
+				if (this.colony.state.isIncubating) {
+					let setup = Setups.upgraders.remote_boosted
+					upgradersNeeded = Math.max(1, upgradersNeeded)
+					this.wishlist(upgradersNeeded, setup);
+					return;
+				}
 				this.wishlist(upgradersNeeded, setup);
 			}
 		}
