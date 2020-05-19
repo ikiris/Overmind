@@ -33,6 +33,7 @@ export class ExpansionEvaluator {
 		// This method is typed a little strangely to avoid some circular dependency problems
 
 		// This only gets run once per colony
+		const colStatus = RoomIntel.getRoomStatus(colonyRoomName)
 		if (_.keys(expansionData.possibleExpansions).length == 0 || Game.time > expansionData.expiration) {
 			// Generate a list of rooms which can possibly be settled in
 			const nearbyRooms = Cartographer.recursiveRoomSearch(colonyRoomName, MAX_EXPANSION_DISTANCE);
@@ -42,7 +43,7 @@ export class ExpansionEvaluator {
 				possibleExpansions = possibleExpansions.concat(nearbyRooms[depth]);
 			}
 			for (const roomName of possibleExpansions) {
-				if (Cartographer.roomType(roomName) == ROOMTYPE_CONTROLLER) {
+				if (Cartographer.roomType(roomName) == ROOMTYPE_CONTROLLER && RoomIntel.getRoomStatus(roomName) == colStatus) {
 					expansionData.possibleExpansions[roomName] = true;
 				}
 			}
