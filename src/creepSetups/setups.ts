@@ -207,11 +207,6 @@ export const Setups = {
 		default: new CreepSetup(Roles.upgrader, {
 			pattern  : [WORK, WORK, WORK, CARRY, MOVE],
 			sizeLimit: Infinity,
-		}),
-
-		boosted: new CreepSetup(Roles.upgrader, {
-			pattern  : [WORK, WORK, WORK, CARRY, MOVE],
-			sizeLimit: Infinity,
 		}, ["upgrade"]),
 
 		rcl8: new CreepSetup(Roles.upgrader, {

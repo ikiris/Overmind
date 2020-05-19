@@ -26,15 +26,12 @@ export class UpgradingOverlord extends Overlord {
 	}
 
 	init() {
-		if (this.colony.level < 3) { // can't spawn upgraders at early levels
+		if (this.colony.level < 2) { // can't spawn upgraders at early levels
 			return;
 		}
 		if (this.colony.assets.energy > UpgradeSite.settings.energyBuffer
 			|| this.upgradeSite.controller.ticksToDowngrade < 500) {
 			let setup = Setups.upgraders.default;
-			if (this.colony.level > 5 && this.colony.labs.length > 0) {
-				setup = Setups.upgraders.boosted
-			}
 			if (this.colony.level == 8) {
 				setup = Setups.upgraders.rcl8;
 				if (this.colony.labs.length == 10 &&
