@@ -17,6 +17,7 @@ import set = Reflect.set;
 
 export const EXPANSION_EVALUATION_FREQ = 500;
 export const MIN_EXPANSION_DISTANCE = 2;
+export const MAX_EXPANSION_DISTANCE = 8;
 
 export interface ColonyExpansionData {
 	possibleExpansions: { [roomName: string]: number | boolean };
@@ -34,7 +35,7 @@ export class ExpansionEvaluator {
 		// This only gets run once per colony
 		if (_.keys(expansionData.possibleExpansions).length == 0 || Game.time > expansionData.expiration) {
 			// Generate a list of rooms which can possibly be settled in
-			const nearbyRooms = Cartographer.recursiveRoomSearch(colonyRoomName, 5);
+			const nearbyRooms = Cartographer.recursiveRoomSearch(colonyRoomName, MAX_EXPANSION_DISTANCE);
 			let possibleExpansions: string[] = [];
 			for (const depth in nearbyRooms) {
 				if (parseInt(depth, 10) <= MIN_EXPANSION_DISTANCE) continue;
