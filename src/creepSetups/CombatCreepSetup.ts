@@ -243,27 +243,29 @@ export class CombatCreepSetup /*extends CreepSetup*/ {
 				cost += BODYPART_COST[MOVE];
 			} else {
 				// If any non-root parts are below the target ratio and below the maxParts limit, add them
-				let nonRootPartAdded = false;
+				let partAdded = false;
 				for (const part of partPriorities) {
 					if (bodyCounts[part] < maxParts[part] &&
 						bodyCounts[part] / bodyCounts[rootPart] < bodyRatio[part] / bodyRatio[rootPart]) {
 						bodyCounts[part]++;
 						cost += BODYPART_COSTS[part];
-						nonRootPartAdded = true;
+						partAdded = true;
 						break;
 					}
 				}
 				// Otherwise add another root part
-				if (!nonRootPartAdded && bodyCounts[rootPart] < maxParts[rootPart]) {
+				if (!partAdded && bodyCounts[rootPart] < maxParts[rootPart]) {
 					bodyCounts[rootPart]++;
 					cost += BODYPART_COSTS[rootPart];
-					continue;
+					partAdded = true;
 				}
-				if (weightedParts <=  moveRatio * (bodyCounts.move - 1)) {
-					bodyCounts.move--;
-					cost -= BODYPART_COST[MOVE];
+				if (!partAdded) {
+					if (weightedParts <=  moveRatio * (bodyCounts.move - 1)) {
+						bodyCounts.move--;
+						cost -= BODYPART_COST[MOVE];
+					}
+					break;
 				}
-				return bodyCounts as Full<BodyCounts>;
 			}
 		}
 
