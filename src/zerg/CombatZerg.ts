@@ -180,7 +180,7 @@ export class CombatZerg extends Zerg {
 	}
 
 	private kiteIfNecessary() { // Should filter by melee at some point
-		const nearbyHostiles = _.filter(this.room.dangerousHostiles, c => this.pos.inRangeToXY(c.pos.x, c.pos.y, 2));
+		const nearbyHostiles = _.filter(this.room.dangerousHostiles, c => this.pos.inRangeToXY(c.pos.x, c.pos.y, CombatIntel.getAttackDamage(c) ? 2 : 1));
 		if (nearbyHostiles.length && !this.inRampart) {
 			// this.say('run!');
 			this.rangedMassAttack();
