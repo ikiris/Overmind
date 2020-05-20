@@ -254,10 +254,16 @@ export class CombatCreepSetup /*extends CreepSetup*/ {
 					}
 				}
 				// Otherwise add another root part
-				if (!nonRootPartAdded) {
+				if (!nonRootPartAdded && bodyCounts[rootPart] < maxParts[rootPart]) {
 					bodyCounts[rootPart]++;
 					cost += BODYPART_COSTS[rootPart];
+					continue;
 				}
+				if (weightedParts <=  moveRatio * (bodyCounts.move - 1)) {
+					bodyCounts.move--;
+					cost -= BODYPART_COST[MOVE];
+				}
+				return bodyCounts as Full<BodyCounts>;
 			}
 		}
 
@@ -339,7 +345,7 @@ export class CombatCreepSetup /*extends CreepSetup*/ {
 		}
 
 		const moveRatio = (availableBoosts.move ? BOOST_EFFECTS.move[availableBoosts.move].fatigue : 1)
-						  * opts.moveSpeed;
+						  / opts.moveSpeed;
 
 		// We need attack to be defined for bodyRatio and maxParts
 		opts.bodyRatio.attack = opts.bodyRatio.attack || 1;
@@ -388,7 +394,7 @@ export class CombatCreepSetup /*extends CreepSetup*/ {
 		}
 
 		const moveRatio = (availableBoosts.move ? BOOST_EFFECTS.move[availableBoosts.move].fatigue : 1)
-								 * opts.moveSpeed;
+								 / opts.moveSpeed;
 
 		// We need ranged to be defined for bodyRatio and maxParts
 		opts.bodyRatio.ranged = opts.bodyRatio.ranged || 1;
@@ -435,7 +441,7 @@ export class CombatCreepSetup /*extends CreepSetup*/ {
 		}
 
 		const moveRatio = (availableBoosts.move ? BOOST_EFFECTS.move[availableBoosts.move].fatigue : 1)
-								 * opts.moveSpeed;
+								 / opts.moveSpeed;
 
 		// We need heal to be defined for bodyRatio and maxParts
 		opts.bodyRatio.heal = opts.bodyRatio.heal || 1;
@@ -479,7 +485,7 @@ export class CombatCreepSetup /*extends CreepSetup*/ {
 		}
 
 		const moveRatio = (availableBoosts.move ? BOOST_EFFECTS.move[availableBoosts.move].fatigue : 1)
-								 * opts.moveSpeed;
+								 / opts.moveSpeed;
 
 		// We need work to be defined for bodyRatio and maxParts
 		opts.bodyRatio.work = opts.bodyRatio.work || 1;
@@ -504,10 +510,10 @@ export class CombatCreepSetup /*extends CreepSetup*/ {
 	static generateMinerBody(energy: number, availableBoosts: AvailableBoosts, opts: Full<BodyOpts>): BodyGeneratorReturn {
 
 		const moveRatio = (availableBoosts.move ? BOOST_EFFECTS.move[availableBoosts.move].fatigue : 1)
-								 * opts.moveSpeed;
+								 / opts.moveSpeed;
 		
 		// We need work to be defined for bodyRatio and maxParts
-		opts.bodyRatio.work = opts.bodyRatio.work || 1;
+		opts.bodyRatio.work = opts.bodyRatio.work || 2;
 
 		const DEFAULT_MAX_PARTS_MINER = {work: 6, carry: 1};
 		opts.maxParts.work = opts.maxParts.work || DEFAULT_MAX_PARTS_MINER.work;
@@ -523,9 +529,11 @@ export class CombatCreepSetup /*extends CreepSetup*/ {
 
 		const rootPart: PartNonMove = 'work';
 		const partPriorities: PartNonMove[] = ['carry'];
+		log.debug(`miner: ${JSON.stringify(opts)}`)
 		const bodyCounts = CombatCreepSetup.generateBodyCounts(energy, opts, moveRatio, rootPart, partPriorities, true);
-
+		log.debug(`miner: ${JSON.stringify(bodyCounts)}`)
 		const body = CombatCreepSetup.arrangeBodyParts(bodyCounts, opts);
+		log.debug(`miner: ${JSON.stringify(body)}`)
 		const boosts = _.compact(_.values(availableBoosts)) as ResourceConstant[];
 		return {body: body, boosts: boosts};
 
@@ -557,7 +565,7 @@ export class CombatCreepSetup /*extends CreepSetup*/ {
 		}
 
 		const moveRatio = (availableBoosts.move ? BOOST_EFFECTS.move[availableBoosts.move].fatigue : 1)
-								 * opts.moveSpeed;
+								 / opts.moveSpeed;
 
 		// We need work to be defined for bodyRatio and maxParts
 		opts.bodyRatio.work = opts.bodyRatio.work || 1;
@@ -596,7 +604,7 @@ export class CombatCreepSetup /*extends CreepSetup*/ {
 		}
 
 		const moveRatio = (availableBoosts.move ? BOOST_EFFECTS.move[availableBoosts.move].fatigue : 1)
-								 * opts.moveSpeed;
+								 / opts.moveSpeed;
 
 		// We need carry to be defined for bodyRatio and maxParts
 		opts.bodyRatio.carry = opts.bodyRatio.carry || 1;
