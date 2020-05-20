@@ -4,8 +4,9 @@ import {DistractionOverlord} from '../../overlords/defense/distraction';
 import {RangedDefenseOverlord} from '../../overlords/defense/rangedDefense';
 import {profile} from '../../profiler/decorator';
 import {BarrierPlanner} from '../../roomPlanner/BarrierPlanner';
-import {Directive} from '../Directive';
 import {NotifierPriority} from '../Notifier';
+
+import {DefenseDirective} from '../defense/_DefenseDirective';
 
 interface DirectiveInvasionDefenseMemory extends FlagMemory {
 	persistent?: boolean;
@@ -16,7 +17,7 @@ interface DirectiveInvasionDefenseMemory extends FlagMemory {
  * Defend an owned room against an incoming player invasion
  */
 @profile
-export class DirectiveInvasionDefense extends Directive {
+export class DirectiveInvasionDefense extends DefenseDirective {
 
 	static directiveName = 'invasionDefense';
 	static color = COLOR_BLUE;
