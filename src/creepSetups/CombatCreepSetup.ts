@@ -132,7 +132,7 @@ export class CombatCreepSetup /*extends CreepSetup*/ {
 	 * Returns the number of parts that a body will have if made from a given colony
 	 */
 	getBodyPotential(partType: BodyPartConstant, colony: Colony): number {
-		const body = this.create(colony).body;
+		const body = this.bodyGenerator(colony.room.energyCapacityAvailable, {}, this.opts).body;
 		return _.filter(body, (part: BodyPartConstant) => part == partType).length;
 	}
 
