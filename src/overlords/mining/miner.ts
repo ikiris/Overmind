@@ -1,7 +1,8 @@
 import {$} from '../../caching/GlobalCache';
 import {ColonyStage} from '../../Colony';
 import {log} from '../../console/log';
-import {bodyCost, CreepSetup} from '../../creepSetups/CreepSetup';
+import {bodyCost} from '../../creepSetups/CreepSetup';
+import {CombatCreepSetup} from '../../creepSetups/CombatCreepSetup';
 import {Roles, Setups} from '../../creepSetups/setups';
 import {DirectiveOutpost} from '../../directives/colony/outpost';
 import {DirectiveHarvest} from '../../directives/resource/harvest';
@@ -13,10 +14,7 @@ import {maxBy, minBy} from '../../utilities/utils';
 import {Zerg} from '../../zerg/Zerg';
 import {Overlord, OverlordMemory} from '../Overlord';
 
-export const StandardMinerSetupCost = bodyCost(Setups.drones.miners.standard.generateBody(Infinity));
-
-export const DoubleMinerSetupCost = bodyCost(Setups.drones.miners.double.generateBody(Infinity));
-
+export const StandardMinerSetupCost = bodyCost(Setups.drones.miners.standard.generateMaxedBody().body);
 
 const BUILD_OUTPUT_FREQUENCY = 15;
 const SUICIDE_CHECK_FREQUENCY = 3;
@@ -48,7 +46,7 @@ export class MiningOverlord extends Overlord {
 	energyPerTick: number;
 	miningPowerNeeded: number;
 	mode: 'early' | 'SK' | 'link' | 'standard' | 'double';
-	setup: CreepSetup;
+	setup: CombatCreepSetup;
 	minersNeeded: number;
 	allowDropMining: boolean;
 
@@ -109,6 +107,10 @@ export class MiningOverlord extends Overlord {
 		// 							 this.pos.availableNeighbors(true).length);
 		this.minersNeeded = Math.min(Math.ceil(this.miningPowerNeeded / miningPowerEach),
 									 this.pos.availableNeighbors(true).length);
+		if (this.colony.state.isIncubating) {
+			this.minersNeeded = 1
+			this.setup = Setups.drones.miners.remote
+		}
 		this.minersNeeded = this.isDisabled ? 0 : this.minersNeeded;
 		// Allow drop mining at low levels
 		this.allowDropMining = this.colony.level < MiningOverlord.settings.dropMineUntilRCL;

@@ -112,8 +112,8 @@ export class ExpansionEvaluator {
 			const setup = roomType == ROOMTYPE_CONTROLLER ? Setups.drones.miners.standard.generateMaxedBody()
 				: Setups.drones.miners.sourceKeeper.generateMaxedBody();
 			const effectiveCreepUptime = (CREEP_LIFE_TIME - sourcePathLengths[source.pos.print]);
-			creepEnergyCost += bodyCost(setup)/effectiveCreepUptime;
-			spawnTimeCost += setup.length*CREEP_SPAWN_TIME/effectiveCreepUptime;
+			creepEnergyCost += bodyCost(setup.body)/effectiveCreepUptime;
+			spawnTimeCost += setup.body.length*CREEP_SPAWN_TIME/effectiveCreepUptime;
 			// Always harvesting, sometimes replacement is moving
 			cpuCost += 0.2 + 0.2*(1-effectiveCreepUptime/CREEP_LIFE_TIME);
 		}

@@ -4,7 +4,8 @@ import {
 	RavagerSetup,
 	RemoteUpgraderSetup,
 	TransfuserSetup,
-	ZerglingSetup
+	ZerglingSetup,
+	MinerSetup
 } from './CombatCreepSetup';
 import {CreepSetup} from './CreepSetup';
 
@@ -52,6 +53,16 @@ export const Setups = {
 
 		miners: {
 
+			default: new MinerSetup(),
+			standard: new MinerSetup(),
+			standardCPU: new MinerSetup({bodyOpts:{maxParts:{work: 8}}}),
+			linkOptimized: new MinerSetup({moveSpeed: .3, bodyOpts:{maxParts:{work: 12}}}),
+			emergency: new MinerSetup({bodyOpts:{maxParts:{work: 2}}}),
+			double: new MinerSetup({bodyOpts:{maxParts:{work: 12}}}),
+			sourceKeeper: new MinerSetup({bodyOpts:{maxParts:{work: 10}}, moveSpeed: 1, boosted: true}),
+			remote: new MinerSetup({moveSpeed: 1, boosted: true}),
+		
+			/*
 			default: new CreepSetup(Roles.drone, {
 				pattern  : [WORK, WORK, CARRY, MOVE],
 				sizeLimit: 3,
@@ -86,6 +97,7 @@ export const Setups = {
 				pattern  : [WORK, WORK, CARRY, MOVE],
 				sizeLimit: 5,
 			})
+			*/
 		}
 	},
 
