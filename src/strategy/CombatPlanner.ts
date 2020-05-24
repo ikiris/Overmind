@@ -91,6 +91,8 @@ export class CombatPlanner {
 
 	constructor() {
 		_.defaults(this.memory, defaultCombatPlannerMemory);
+		this.directives = [];
+		this.creeps = [];
 	}
 
 	get memory(): CombatPlannerMemory {
