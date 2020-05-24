@@ -133,14 +133,14 @@ export class CombatPlanner {
 	}
 
 	static getThreat(directive: DefenseDirective): Threat {
-
 		if (directive.room) {
 			return {
 				directive    : directive,
 				potentials   : CombatIntel.getCombatPotentials(directive.room.hostiles),
 				roomName     : directive.room.name,
 				closestColony: directive.colony.name,
-				distances    : directive.overlord.spawnGroup.memory.distances,
+				distances    : {},
+//				distances    : directive.overlord.spawnGroup.memory.distances,
 				lastSeen     : {
 					tick: Game.time,
 				}
@@ -151,7 +151,8 @@ export class CombatPlanner {
 				potentials   : undefined,
 				roomName     : directive.pos.roomName,
 				closestColony: directive.colony.name,
-				distances    : directive.overlord.spawnGroup.memory.distances,
+				distances    : {},
+//				distances    : directive.overlord.spawnGroup.memory.distances,
 				lastSeen     : {
 					tick: Game.time,
 				}
@@ -343,7 +344,7 @@ export class CombatPlanner {
 
 			// Make new siege analyses for rooms needing it
 			if (room.owner && !room.my) {
-				this.registerSiegeAnalysis(room);
+				//this.registerSiegeAnalysis(room);
 			}
 
 		}
