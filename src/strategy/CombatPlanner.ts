@@ -10,7 +10,7 @@ import {ema, getCacheExpiration} from '../utilities/utils';
 import {CombatZerg} from '../zerg/CombatZerg';
 
 export interface Threat {
-	directive: DefenseDirective;
+//	directive: DefenseDirective;
 	potentials: CombatPotentials | undefined;
 	roomName: string;
 	closestColony: string;
@@ -137,7 +137,7 @@ export class CombatPlanner {
 	static getThreat(directive: DefenseDirective): Threat {
 		if (directive.room) {
 			return {
-				directive    : directive,
+//				directive    : directive,
 				potentials   : CombatIntel.getCombatPotentials(directive.room.hostiles),
 				roomName     : directive.room.name,
 				closestColony: directive.colony.name,
@@ -149,7 +149,7 @@ export class CombatPlanner {
 			};
 		} else {
 			return {
-				directive    : directive,
+//				directive    : directive,
 				potentials   : undefined,
 				roomName     : directive.pos.roomName,
 				closestColony: directive.colony.name,
