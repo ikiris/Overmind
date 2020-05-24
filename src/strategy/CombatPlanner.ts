@@ -4,7 +4,6 @@ import {log} from '../console/log';
 import {DefenseDirective} from '../directives/defense/_DefenseDirective';
 import {CombatIntel, CombatPotentials} from '../intel/CombatIntel';
 import {RoomIntel} from '../intel/RoomIntel';
-import {Mem} from '../memory/Memory';
 import {Pathing} from '../movement/Pathing';
 import {CombatOverlord} from '../overlords/CombatOverlord';
 import {ema, getCacheExpiration} from '../utilities/utils';
@@ -77,24 +76,27 @@ interface CombatPlannerMemory {
 	};
 }
 
-const defaultCombatPlannerMemory: () => CombatPlannerMemory = () => ({
+const defaultCombatPlannerMemory: CombatPlannerMemory = {
 	threats   : {},
 	profiles  : {},
 	defenses  : {},
 	sieges    : {},
 	skirmishes: {},
-});
+};
 
 export class CombatPlanner {
 
 	directives: DefenseDirective[];
 	creeps: CombatZerg[];
-	memory: CombatPlannerMemory;
 
 	constructor() {
-		this.memory = Mem.wrap(Memory, 'combatPlanner', defaultCombatPlannerMemory);
+		_.defaults(this.memory, defaultCombatPlannerMemory);
 		this.directives = [];
 		this.creeps = [];
+	}
+
+	get memory(): CombatPlannerMemory {
+		return Memory.combatPlanner;
 	}
 
 	private static computeHitsToSpawn(room: Room): number {
