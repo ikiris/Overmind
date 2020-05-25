@@ -7,6 +7,8 @@ import {profile} from '../../profiler/decorator';
 import {Tasks} from '../../tasks/Tasks';
 import {Zerg} from '../../zerg/Zerg';
 import {Overlord} from '../Overlord';
+import {RoomIntel} from '../../intel/RoomIntel'
+
 
 /**
  * Claim an unowned room
