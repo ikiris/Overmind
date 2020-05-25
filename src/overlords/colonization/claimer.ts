@@ -40,6 +40,10 @@ export class ClaimingOverlord extends Overlord {
 			return 1; // otherwise ask for 1 claimer
 		});
 		const setup = this.colony.level > 4 ? Setups.infestors.fastClaim : Setups.infestors.claim;
+		// try disabling burning energy on pioneers if the room is a battleground.
+		if (RoomIntel.getSafetyData(this.pos.roomName).threatLevel > .3) {
+			return
+		}
 		this.wishlist(amount, setup);
 	}
 
