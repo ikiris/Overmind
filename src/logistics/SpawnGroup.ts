@@ -164,8 +164,7 @@ export class SpawnGroup {
 		const hatcheries = _.compact(_.map(colonies, colony => colony.hatchery)) as Hatchery[];
 		const distanceTo = (hatchery: Hatchery) => this.memory.distances[hatchery.pos.roomName] + 25;
 
-		log.debug(`spawngroup ${this.roomName} ${this.ref} colonies: ${colonies}`);
-		//log.debug(`spawngroup hatcheries: ${hatcheries}`);
+		//log.debug(`spawngroup ${this.roomName} ${this.ref} colonies: ${colonies}`);
 		// Enqueue each requests to the hatchery with least expected wait time, which is updated after each enqueue
 		for (const request of this.requests) {
 			// const maxCost = bodyCost(request.setup.generateBody(this.energyCapacityAvailable));
