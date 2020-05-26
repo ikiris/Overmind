@@ -133,7 +133,7 @@ export const Setups = {
 	pioneer: new CreepSetup(Roles.pioneer, {
 		pattern  : [WORK, CARRY, MOVE, MOVE],
 		sizeLimit: Infinity,
-	}),
+	}, ["construct"]),
 
 
 	managers: {
