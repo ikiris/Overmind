@@ -260,7 +260,7 @@ export class CombatCreepSetup /*extends CreepSetup*/ {
 					partAdded = true;
 				}
 				if (!partAdded) {
-					if (weightedParts <=  moveRatio * (bodyCounts.move - 1)) {
+					while (weightedParts <=  moveRatio * (bodyCounts.move - 1)) {
 						bodyCounts.move--;
 						cost -= BODYPART_COST[MOVE];
 					}
