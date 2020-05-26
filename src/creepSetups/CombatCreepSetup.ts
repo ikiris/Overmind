@@ -767,6 +767,26 @@ export class RemoteUpgraderSetup extends CombatCreepSetup {
  * - If opts.boosted is true, all parts are requested to be boosted to max level
  * - Specifying opts.bodyOpts may override any of the behaviors above
  */
+export class PioneerSetup extends CombatCreepSetup {
+	constructor(opts: SimpleBodyOpts = {}) {
+		_.defaults(opts, {moveSpeed: 1, boosted: false, bodyOpts: {}});
+		const remoteUpgraderBodyOptions: Full<BodyOpts> = {
+			moveSpeed         : opts.moveSpeed || 1,
+			putMoveFirstInBody: false,
+			bodyRatio         : {work: 2, carry: 1},
+			maxParts          : {work: 40, carry: 10},
+			boosts            : opts.boosted ? ['construct', 'carry', 'move'] : [],
+		};
+		const bodyOpts: Full<BodyOpts> = _.defaults(opts.bodyOpts || {}, remoteUpgraderBodyOptions);
+		super(Roles.upgrader, bodyOpts, CombatCreepSetup.generateUpgraderBody);
+	}
+}
+
+/**
+ * Creates a body for a remote upgrader. Possible optoins:
+ * - If opts.boosted is true, all parts are requested to be boosted to max level
+ * - Specifying opts.bodyOpts may override any of the behaviors above
+ */
 export class MinerSetup extends CombatCreepSetup {
 	constructor(opts: SimpleBodyOpts = {}) {
 		_.defaults(opts, {moveSpeed: .5, boosted: false, bodyOpts: {}});
