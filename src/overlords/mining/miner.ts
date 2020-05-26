@@ -583,12 +583,6 @@ export class MiningOverlord extends Overlord {
 	}
 
 	private handleMiner(miner: Zerg) {
-
-		// Stay safe out there!
-		if (miner.avoidDanger({timer: 10, dropEnergy: true})) {
-			return;
-		}
-
 		// Run the appropriate mining actions
 		switch (this.mode) {
 			case 'early':
@@ -608,9 +602,7 @@ export class MiningOverlord extends Overlord {
 	}
 
 	run() {
-		for (const miner of this.miners) {
-			this.handleMiner(miner);
-		}
+		this.autoRun(this.miners, miner => this.handleMiner(miner), miner => miner.avoidDanger());
 		if (this.room && Game.time % BUILD_OUTPUT_FREQUENCY == 1) {
 			this.addRemoveContainer();
 		}

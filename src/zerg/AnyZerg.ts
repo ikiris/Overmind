@@ -413,11 +413,14 @@ export abstract class AnyZerg {
 		if ((this.ticksToLive || 0) < 50) {
 			return false; // I just wanna die!!
 		}
-
+		
 		_.defaults(opts, {timer: 10, dropEnergy: true});
-
+		
 		// If you previously determined you are in danger, wait for timer to expire
 		if (this.memory.avoidDanger) {
+			if (this.flee(undefined, opts)) {
+				return true;
+			}
 			if (this.memory.avoidDanger.timer > 0) {
 				this.goToRoom(this.memory.avoidDanger.fallback);
 				if (opts.dropEnergy && this.carry.energy > 0) {
@@ -464,7 +467,7 @@ export abstract class AnyZerg {
 				});
 				if (!closestColony) {
 					log.error(`${this.print} is all alone in a dangerous place and can't find their way home!`);
-					return false;
+					return this.flee(undefined, opts);
 				}
 				fallback = closestColony.name;
 			}
@@ -483,6 +486,9 @@ export abstract class AnyZerg {
 				}
 			}
 
+			if (this.flee(undefined, opts)) {
+				return true;
+			}
 			this.goToRoom(fallback);
 			return true;
 
