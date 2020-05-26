@@ -531,11 +531,11 @@ export class CombatCreepSetup /*extends CreepSetup*/ {
 
 		const rootPart: PartNonMove = 'work';
 		const partPriorities: PartNonMove[] = ['carry'];
-		log.debug(`miner: ${JSON.stringify(opts)}`)
+		//log.debug(`miner: ${JSON.stringify(opts)}`)
 		const bodyCounts = CombatCreepSetup.generateBodyCounts(energy, opts, moveRatio, rootPart, partPriorities, true);
-		log.debug(`miner: ${JSON.stringify(bodyCounts)}`)
+		//log.debug(`miner: ${JSON.stringify(bodyCounts)}`)
 		const body = CombatCreepSetup.arrangeBodyParts(bodyCounts, opts);
-		log.debug(`miner: ${JSON.stringify(body)}`)
+		//log.debug(`miner: ${JSON.stringify(body)}`)
 		const boosts = _.compact(_.values(availableBoosts)) as ResourceConstant[];
 		return {body: body, boosts: boosts};
 
