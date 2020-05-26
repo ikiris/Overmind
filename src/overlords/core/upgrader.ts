@@ -91,6 +91,9 @@ export class UpgradingOverlord extends Overlord {
 				if (this.upgradeSite.battery && this.upgradeSite.battery.targetedBy.length == 0) {
 					upgrader.task = Tasks.recharge();
 				}
+				if (!this.upgradeSite.battery) {
+					upgrader.task = Tasks.recharge();
+				}
 			}
 		}
 	}
