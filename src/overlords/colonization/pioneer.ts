@@ -55,6 +55,7 @@ export class PioneerOverlord extends Overlord {
 	}
 
 	private handlePioneer(pioneer: Zerg): void {
+		if (pioneer.avoidDanger()) return;
 		// Ensure you are in the assigned room
 		if (pioneer.room == this.room && !pioneer.pos.isEdge) {
 			// Remove any blocking structures preventing claimer from reaching controller
