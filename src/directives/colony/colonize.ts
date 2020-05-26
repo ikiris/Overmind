@@ -60,14 +60,10 @@ export class DirectiveColonize extends Directive {
 			for (const pioneer of this.overlords.pioneer.pioneers) {
 				const miningOverlord = miningOverlords.shift();
 				if (miningOverlord) {
-					if (verbose) {
-						log.info(`Reassigning: ${pioneer.print} to mine: ${miningOverlord.print}`);
-					}
+					log.info(`Reassigning: ${pioneer.print} to mine: ${miningOverlord.print}`);
 					pioneer.reassign(miningOverlord, Roles.drone);
 				} else {
-					if (verbose) {
-						log.info(`Reassigning: ${pioneer.print} to work: ${this.toColonize.overlords.work.print}`);
-					}
+					log.info(`Reassigning: ${pioneer.print} to work: ${this.toColonize.overlords.work.print}`);
 					pioneer.reassign(this.toColonize.overlords.work, Roles.worker);
 				}
 			}
