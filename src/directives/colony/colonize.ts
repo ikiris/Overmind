@@ -45,13 +45,14 @@ export class DirectiveColonize extends Directive {
 		this.overlords.claim = new ClaimingOverlord(this);
 		this.overlords.pioneer = new PioneerOverlord(this);
 		let sf = RoomIntel.getSafetyData(this.pos.roomName);
-		if (sf.threatLevel > 0 && sf.invisibleFor > 300) {
+		if (sf.threatLevel > .1) {
 			this.overlords.scout = new StationaryScoutOverlord(this);
 		}
 	}
 
 	init() {
-		this.alert(`Colonization in progress`);
+		const mixin = this.toColonize ? " (host: ${this.toColonize.roomName})" : ""
+		this.alert(`Colonization in progress${mixin}`);
 	}
 
 	run(verbose = false) {
