@@ -1,8 +1,10 @@
 import {Colony} from '../../Colony';
 import {log} from '../../console/log';
 import {Roles} from '../../creepSetups/setups';
+import {RoomIntel} from '../../intel/RoomIntel';
 import {ClaimingOverlord} from '../../overlords/colonization/claimer';
 import {PioneerOverlord} from '../../overlords/colonization/pioneer';
+import {StationaryScoutOverlord} from '../../overlords/scouting/stationary';
 import {profile} from '../../profiler/decorator';
 import {Cartographer, ROOMTYPE_CONTROLLER} from '../../utilities/Cartographer';
 import {printRoomName} from '../../utilities/utils';
@@ -26,6 +28,7 @@ export class DirectiveColonize extends Directive {
 	overlords: {
 		claim: ClaimingOverlord;
 		pioneer: PioneerOverlord;
+		scout: StationaryScoutOverlord;
 	};
 
 	constructor(flag: Flag) {
@@ -46,6 +49,10 @@ export class DirectiveColonize extends Directive {
 	spawnMoarOverlords() {
 		this.overlords.claim = new ClaimingOverlord(this);
 		this.overlords.pioneer = new PioneerOverlord(this);
+		let sf = RoomIntel.getSafetyData(this.pos.roomName);
+		if (sf.threatLevel > 0 && sf.invisibleFor > 300) {
+			this.overlords.scout = new StationaryScoutOverlord(this);
+		}
 	}
 
 	init() {
