@@ -418,9 +418,6 @@ export abstract class AnyZerg {
 		
 		// If you previously determined you are in danger, wait for timer to expire
 		if (this.memory.avoidDanger) {
-			if (this.flee(undefined, opts)) {
-				return true;
-			}
 			if (this.memory.avoidDanger.timer > 0) {
 				this.goToRoom(this.memory.avoidDanger.fallback);
 				if (opts.dropEnergy && this.carry.energy > 0) {
