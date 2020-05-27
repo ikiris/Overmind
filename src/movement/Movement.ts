@@ -468,7 +468,7 @@ export class Movement {
 				return MovePriorities.powerCreep;
 			} else {
 				log.debug(`getPushPriority: ${creep.name} final: ${MovePriorities[creep.memory.role]} ${MovePriorities.default}`)
-				return MovePriorities[creep.memory.role] || MovePriorities.default;
+				return (creep.memory.role in MovePriorities) ? MovePriorities[creep.memory.role] : MovePriorities.default;
 			}
 		}
 	}
