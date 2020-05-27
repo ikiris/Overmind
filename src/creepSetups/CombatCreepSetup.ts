@@ -238,7 +238,7 @@ export class CombatCreepSetup /*extends CreepSetup*/ {
 			// Highest priority is add move parts to maintain the target move speed
 			const weightedParts = unweightedCarryParts ? _.sum(bodyCounts) - bodyCounts.move - bodyCounts.carry
 													   : _.sum(bodyCounts) - bodyCounts.move;
-			if (weightedParts >= moveRatio * bodyCounts.move) {
+			if (weightedParts + 1 >= moveRatio * bodyCounts.move) {
 				bodyCounts.move++;
 				cost += BODYPART_COST[MOVE];
 			} else {
