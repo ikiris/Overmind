@@ -574,9 +574,12 @@ export class CombatCreepSetup /*extends CreepSetup*/ {
 
 		const rootPart: PartNonMove = 'work';
 		const partPriorities: PartNonMove[] = ['tough','carry', 'heal'];
+		log.debug(`bodymaker upgrader: ${JSON.stringify(opts)}`)
 		const bodyCounts = CombatCreepSetup.generateBodyCounts(energy, opts, moveRatio, rootPart, partPriorities, true);
+		log.debug(`bodymaker upgrader: ${JSON.stringify(bodyCounts)}`)
 
 		const body = CombatCreepSetup.arrangeBodyParts(bodyCounts, opts);
+		log.debug(`bodymaker upgrader: ${JSON.stringify(body)}`)
 		const boosts = _.compact(_.values(availableBoosts)) as ResourceConstant[];
 		return {body: body, boosts: boosts};
 
