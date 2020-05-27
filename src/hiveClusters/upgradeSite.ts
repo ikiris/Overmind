@@ -93,7 +93,7 @@ export class UpgradeSite extends HiveCluster {
 	private getUpgradePowerNeeded(): number {
 		return $.number(this, 'upgradePowerNeeded', () => {
 			if (this.room.storage) { // Workers perform upgrading until storage is set up
-				const amountOver = Math.max(this.colony.assets.energy - UpgradeSite.settings.energyBuffer, 0);
+				const amountOver = Math.max(this.colony.assets.energy - (UpgradeSite.settings.energyBuffer / (this.colony.state.isIncubating ? 2 : 1)), 0);
 				let upgradePower = 1 + Math.floor(amountOver / UpgradeSite.settings.energyPerBodyUnit);
 				if (amountOver > 800000) {
 					upgradePower *= 4; // double upgrade power if we have lots of surplus energy
