@@ -106,6 +106,6 @@ export class UpgradingOverlord extends Overlord {
 
 	run() {
 		this.autoRun(this.upgraders, upgrader => this.handleUpgrader(upgrader),
-					 upgrader => upgrader.flee());
+					 upgrader => upgrader.avoidDanger());
 	}
 }
