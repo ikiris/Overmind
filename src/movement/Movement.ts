@@ -456,25 +456,19 @@ export class Movement {
 	// }
 
 	private static getPushPriority(creep: AnyCreep | AnyZerg): number {
-		if (!creep.memory) {
-			log.debug(`getPushPriority: ${creep.name} !memory: ${MovePriorities.default}`)
-			return MovePriorities.default;
-		}
+		if (!creep.memory) return MovePriorities.default;
 		if (creep.memory._go && creep.memory._go.priority) {
-			log.debug(`getPushPriority: ${creep.name} _goPriority: ${creep.memory._go.priority}`)
 			return creep.memory._go.priority;
 		} else {
 			if (isPowerZerg(creep)) {
 				return MovePriorities.powerCreep;
 			} else {
-				log.debug(`getPushPriority: ${creep.name} final: ${MovePriorities[creep.memory.role]} ${MovePriorities.default}`)
 				return (creep.memory.role in MovePriorities) ? MovePriorities[creep.memory.role] : MovePriorities.default;
 			}
 		}
 	}
 
 	private static shouldPush(pusher: AnyCreep | AnyZerg, pushee: AnyCreep | AnyZerg): boolean {
-		log.debug(`shouldPush: ${pusher.name} ${this.getPushPriority(pusher)} ${pushee.name} ${this.getPushPriority(pushee)}`)
 		if (this.getPushPriority(pusher) < this.getPushPriority(pushee)) {
 			// pushee less important than pusher
 			return true;
@@ -1392,4 +1386,3 @@ export class Movement {
 // Creep.prototype.goTo = function (destination: RoomPosition | HasPos, options?: MoveOptions) {
 // 	return Movement.goTo(this, destination, options);
 // };
-
