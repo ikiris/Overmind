@@ -128,6 +128,10 @@ export class WorkerOverlord extends Overlord {
 			totalFortifyHitsRemaining > 5 * approxRepairAmountPerLifetime) {
 			this.useBoostedRepair = true;
 		}
+		
+		if (this.colony.state.isIncubating) {
+			this.useBoostedRepair = true;
+		}
 
 		// Register workers
 		this.workers = this.zerg(Roles.worker);
