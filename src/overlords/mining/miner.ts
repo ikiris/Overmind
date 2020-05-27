@@ -81,7 +81,7 @@ export class MiningOverlord extends Overlord {
 		if (Cartographer.roomType(this.pos.roomName) == ROOMTYPE_SOURCEKEEPER) {
 			this.mode = 'SK';
 			this.setup = Setups.drones.miners.sourceKeeper;
-		} else if (this.colony.room.energyCapacityAvailable < StandardMinerSetupCost) {
+		} else if (this.colony.room.energyCapacityAvailable < StandardMinerSetupCost && !this.colony.state.isIncubating) {
 			this.mode = 'early';
 			this.setup = Setups.drones.miners.default;
 		}
