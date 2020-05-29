@@ -382,6 +382,6 @@ export class WorkerOverlord extends Overlord {
 
 	run() {
 		this.autoRun(this.workers, worker => this.handleWorker(worker),
-					 worker => worker.flee(worker.room.fleeDefaults, {invalidateTask: true}));
+					 (this.criticalBarriers.length == 0) ? (worker => worker.flee(worker.room.fleeDefaults, {invalidateTask: true})) : undefined);
 	}
 }
