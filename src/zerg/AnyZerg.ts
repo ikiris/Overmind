@@ -483,9 +483,6 @@ export abstract class AnyZerg {
 				}
 			}
 
-			if (this.flee(undefined, opts)) {
-				return true;
-			}
 			this.goToRoom(fallback);
 			return true;
 
