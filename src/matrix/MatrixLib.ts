@@ -255,7 +255,7 @@ export class MatrixLib {
 					..._.map(room.sourceKeepers, keeper => keeper.pos),
 					..._.map(room.keeperLairs.filter(lair => (lair.ticksToSpawn || Infinity) < 100), lair => lair.pos),
 					...chillPositions];
-				MatrixLib.blockWithinRange(matrix, blockPositions, 3);
+				MatrixLib.blockWithinRange(matrix, blockPositions, 5);
 			}
 		}
 
@@ -328,7 +328,7 @@ export class MatrixLib {
 			if (!(skDirective && skDirective.age > 2500)) {
 				const keeperLairInfo = RoomIntel.getKeeperLairInfo(roomName);
 				const chillPositions = _.compact(_.map(keeperLairInfo || [], info => info.chillPos)) as RoomPosition[];
-				MatrixLib.blockWithinRange(matrix, chillPositions, 3);
+				MatrixLib.blockWithinRange(matrix, chillPositions, 5);
 			}
 		}
 
