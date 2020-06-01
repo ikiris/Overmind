@@ -4,7 +4,7 @@ import {CreepSetup} from '../../creepSetups/CreepSetup';
 import {Roles, Setups} from '../../creepSetups/setups';
 import {DirectiveNukeResponse} from '../../directives/situational/nukeResponse';
 import {OverlordPriority} from '../../priorities/priorities_overlords';
-import {BuildPriorities, FortifyPriorities} from '../../priorities/priorities_structures';
+import {BuildPriorities, BuildIncubatingPriorities, FortifyPriorities} from '../../priorities/priorities_structures';
 import {profile} from '../../profiler/decorator';
 import {Tasks} from '../../tasks/Tasks';
 import {Cartographer, ROOMTYPE_CONTROLLER} from '../../utilities/Cartographer';
@@ -230,7 +230,11 @@ export class WorkerOverlord extends Overlord {
 
 	private buildActions(worker: Zerg): boolean {
 		const groupedSites = _.groupBy(this.constructionSites, site => site.structureType);
-		for (const structureType of BuildPriorities) {
+		let BuildPri: BuildableStructureConstant[] = BuildPriorities
+		if (this.colony.state.isIncubating) {
+			BuildPri = BuildIncubatingPriorities
+		}
+		for (const structureType of BuildPri) {
 			if (groupedSites[structureType]) {
 				const target = worker.pos.findClosestByMultiRoomRange(groupedSites[structureType]);
 				if (target) {
