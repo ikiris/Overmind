@@ -215,7 +215,9 @@ export class WorkerOverlord extends Overlord {
 		if (this.useBoostedRepair) {
 			setup = CreepSetup.boosted(setup, ['construct', 'move']);
 		}
-		this.wishlist(numWorkers, setup);
+		this.wishlist(numWorkers, setup, {priority: this.priority
+				+ ((this.colony.assets.energy > 10000 || this.workers.length == 0) ? 0 : 500)
+			});
 	}
 
 	private repairActions(worker: Zerg): boolean {
