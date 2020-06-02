@@ -25,9 +25,9 @@ export const BuildPriorities: BuildableStructureConstant[] = [
 export const BuildIncubatingPriorities: BuildableStructureConstant[] = [
 	STRUCTURE_SPAWN,
 	STRUCTURE_TOWER,
+	STRUCTURE_CONTAINER,
 	STRUCTURE_STORAGE,
 	STRUCTURE_TERMINAL,
-	STRUCTURE_CONTAINER,
 	STRUCTURE_LINK,
 	STRUCTURE_EXTRACTOR,
 	STRUCTURE_LAB,
