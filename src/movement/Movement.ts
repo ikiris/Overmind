@@ -330,6 +330,7 @@ export class Movement {
 				log.debug(`Movement: incomplete path for ${creep.print}! ` +
 						  `(${creep.pos.print} ${rightArrow} ${destination.print})`);
 				color = 'red';
+				creep.debug(new Error().stack)
 			}
 			this.circle(creep.pos, color);
 			moveData.path = Pathing.serializePath(creep.pos, ret.path, color);
