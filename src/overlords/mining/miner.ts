@@ -102,6 +102,7 @@ export class MiningOverlord extends Overlord {
 			this.setup = Setups.drones.miners.standard;
 			// todo: double miner condition
 		}
+
 		const miningPowerEach = this.setup.getBodyPotential(WORK, this.colony);
 		// this.minersNeeded = this.isDisabled ? 0 : Math.min(Math.ceil(this.miningPowerNeeded / miningPowerEach),
 		// 							 this.pos.availableNeighbors(true).length);
@@ -275,6 +276,22 @@ export class MiningOverlord extends Overlord {
 		if (!miner.pos.inRangeToPos(this.pos, 1)) {
 			return miner.goTo(this);
 		}
+		
+		// Link mining
+		if (this.link) {
+			const res = miner.harvest(this.source!);
+			if (_.sum(miner.carry) == miner.carryCapacity) {
+				return miner.goTransfer(this.link);
+			}
+			// If for whatever reason there's no reciever link, you can get stuck in a bootstrapping loop, so
+			// occasionally check for this and drop energy on the ground if needed
+			if (Game.time % 10 == 0) {
+				const commandCenterLink = this.colony.commandCenter ? this.colony.commandCenter.link : undefined;
+				if (!commandCenterLink) {
+					miner.drop(RESOURCE_ENERGY);
+				}
+			}
+		} 
 
 		// Container mining
 		if (this.container) {
