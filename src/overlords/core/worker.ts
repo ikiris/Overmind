@@ -213,7 +213,7 @@ export class WorkerOverlord extends Overlord {
 		}
 
 		if (this.useBoostedRepair) {
-			setup = CreepSetup.boosted(setup, ['construct']);
+			setup = CreepSetup.boosted(setup, ['construct', 'move']);
 		}
 		this.wishlist(numWorkers, setup);
 	}
