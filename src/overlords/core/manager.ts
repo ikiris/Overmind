@@ -501,7 +501,7 @@ export class CommandCenterOverlord extends Overlord {
 		// Emergency dumping actions for critically clogged terminals and storages
 		// if (this.emergencyDumpingActions(manager)) return;
 		// Pick up any dropped resources on ground
-		if (this.pickupActions(manager, (Game.tick % 5 != 0))) return;
+		if (this.pickupActions(manager, (Game.time % 5 != 0))) return;
 		// // Move minerals from storage to terminal if needed
 		// if (hasMinerals(this.commandCenter.storage.store)) {
 		// 	if (this.moveMineralsToTerminal(manager)) return;
