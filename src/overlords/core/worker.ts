@@ -378,6 +378,10 @@ export class WorkerOverlord extends Overlord {
 				if (this.upgradeActions(worker)) return;
 			}
 		} else {
+			if (this.colony.state.isIncubating && (worker.ticksToLive || 1500) > 1400 && this.room.name != worker.pos.roomName) {
+				worker.task = Tasks.goToRoom(this.room.name)
+				return;
+			}
 			// Acquire more energy
 			const workerWithdrawLimit = this.colony.stage == ColonyStage.Larva ? 750 : 100;
 			worker.task = Tasks.recharge(workerWithdrawLimit);
