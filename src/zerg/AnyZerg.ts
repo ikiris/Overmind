@@ -379,7 +379,7 @@ export abstract class AnyZerg {
 	 */
 	flee(avoidGoals: (RoomPosition | HasPos)[] = this.room.fleeDefaults,
 		 fleeOptions: FleeOptions              = {},
-		 moveOptions: MoveOptions              = {}): boolean {
+		 moveOptions: MoveOptions              = {pathOpts: {avoidSK: false}}): boolean {
 		if (avoidGoals.length == 0 || this.room.dangerousHostiles.find(
 			creep => creep.pos.getRangeToXY(this.pos.x, this.pos.y) < 6) == undefined) {
 			return false;
