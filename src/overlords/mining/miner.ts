@@ -360,12 +360,17 @@ export class MiningOverlord extends Overlord {
 
 		// Link mining
 		if (this.link) {
-			const res = miner.harvest(this.source!);
-			if (res == ERR_NOT_IN_RANGE) { // approach mining site
-				if (this.goToMiningSite(miner)) return;
+			// Don't use goToMiningSite() here because miners will push each other around and waste CPU
+			if (!miner.pos.inRangeToPos(this.pos, 1)) {
+				return miner.goTo(this);
 			}
+			const res = miner.harvest(this.source!);
+
 			if (miner.carry.energy > 0.9 * miner.carryCapacity) {
 				miner.transfer(this.link, RESOURCE_ENERGY);
+			}
+			if (res == ERR_NOT_IN_RANGE) { // approach mining site
+				if (this.goToMiningSite(miner)) return;
 			}
 			// If for whatever reason there's no reciever link, you can get stuck in a bootstrapping loop, so
 			// occasionally check for this and drop energy on the ground if needed
