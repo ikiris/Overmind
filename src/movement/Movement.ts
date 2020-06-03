@@ -1204,6 +1204,7 @@ export class Movement {
 		}
 		if (creep.room.name == dest.roomName) {
 			_.defaults(opts.pathOpts!, {
+				avoidSK: false,
 				maxRooms          : 1,
 				modifyRoomCallback: Movement.invasionMoveCallbackModifier,
 			});
