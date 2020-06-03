@@ -253,7 +253,7 @@ export class MatrixLib {
 				const chillPositions = _.compact(_.map(keeperLairInfo || [], info => info.chillPos)) as RoomPosition[];
 				const blockPositions: RoomPosition[] = [
 					..._.map(room.sourceKeepers, keeper => keeper.pos),
-					..._.map(room.keeperLairs.filter(lair => (lair.ticksToSpawn || Infinity) < 100), lair => lair.pos)];
+					..._.map(room.keeperLairs.filter(lair => (lair.ticksToSpawn || Infinity) < 10), lair => lair.pos)];
 				MatrixLib.blockWithinRange(matrix, blockPositions, 5);
 				MatrixLib.softBlockWithinRange(matrix, chillPositions, 5, 5)
 			}

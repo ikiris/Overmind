@@ -424,6 +424,9 @@ export abstract class AnyZerg {
 					this.drop(RESOURCE_ENERGY); // transfer energy to container check is only run on first danger tick
 				}
 				this.memory.avoidDanger.timer--;
+				if (this.flee(undefined, opts)) {
+					return true;
+				}
 				return true;
 			} else {
 				delete this.memory.avoidDanger;

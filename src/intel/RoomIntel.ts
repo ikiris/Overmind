@@ -648,7 +648,7 @@ export class RoomIntel {
 			} else {
 				if (room.dangerousPlayerHostiles.length > 0) {
 					instantaneousThreatLevel = 1;
-				} else if (room.dangerousHostiles.length > 0) {
+				} else if (room.fleeDefaults.length > 0) {
 					instantaneousThreatLevel = 0.5;
 				} else {
 					instantaneousThreatLevel = 0;
