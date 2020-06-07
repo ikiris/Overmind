@@ -161,7 +161,8 @@ export class CommandCenter extends HiveCluster {
 				this.transportRequests.requestInput(this.nuker, Priority.Low);
 			}
 			if (this.nuker.ghodium < this.nuker.ghodiumCapacity
-				&& this.colony.assets[RESOURCE_GHODIUM] >= LAB_MINERAL_CAPACITY) {
+				&& this.colony.assets[RESOURCE_GHODIUM] >= LAB_MINERAL_CAPACITY
+				&& (this.nuker.energy / this.nuker.energyCapacity) > .9) {
 				this.transportRequests.requestInput(this.nuker, Priority.Low, {resourceType: RESOURCE_GHODIUM});
 			}
 		}
