@@ -156,14 +156,15 @@ export class CommandCenter extends HiveCluster {
 		}
 		// Refill nuker with low priority
 		if (this.nuker) {
-			if (this.nuker.energy < this.nuker.energyCapacity && (this.storage.energy > 200000 && this.nuker.cooldown
-																  <= 1000 || this.storage.energy > 800000)) {
-				this.transportRequests.requestInput(this.nuker, Priority.Low);
+			if (this.nuker.energy < this.nuker.energyCapacity && (
+					(this.storage.energy > 200000 || this.colony.state.isBeingNuked)
+					&& this.nuker.cooldown <= 500 || this.storage.energy > 800000)) {
+				this.transportRequests.requestInput(this.nuker, Priority.NormalLow);
 			}
 			if (this.nuker.ghodium < this.nuker.ghodiumCapacity
 				&& this.colony.assets[RESOURCE_GHODIUM] >= LAB_MINERAL_CAPACITY
 				&& (this.nuker.energy / this.nuker.energyCapacity) > .9) {
-				this.transportRequests.requestInput(this.nuker, Priority.Low, {resourceType: RESOURCE_GHODIUM});
+				this.transportRequests.requestInput(this.nuker, Priority.NormalLow, {resourceType: RESOURCE_GHODIUM});
 			}
 		}
 
