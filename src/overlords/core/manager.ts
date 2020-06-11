@@ -22,11 +22,11 @@ const TERMINAL_THRESHOLDS = {
 	},
 	power                : {
 		target   : 2500,
-		tolerance: 2500
+		tolerance: 2000
 	},
 	ops                  : {
 		target   : 2500,
-		tolerance: 2500,
+		tolerance: 2000,
 	},
 	baseMinerals         : {
 		target   : 6500, // 2 * LAB_MINERAL_CAPACITY + 500
