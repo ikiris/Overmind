@@ -5,7 +5,8 @@ import {
 	RemoteUpgraderSetup,
 	TransfuserSetup,
 	ZerglingSetup,
-	MinerSetup
+	MinerSetup,
+	ZealotSetup
 } from './CombatCreepSetup';
 import {CreepSetup} from './CreepSetup';
 
@@ -33,6 +34,7 @@ export const Roles = {
 	healer          : 'transfuser',
 	dismantler      : 'lurker',
 	bunkerDefender  : 'ravager',
+	bunkerRanged    : 'zealot',
 	drill           : 'drill',
 	coolant         : 'coolant',
 	roomPoisoner    : 'poisoner',
@@ -320,6 +322,9 @@ export const CombatSetups = {
 
 	},
 
+	zealot: {
+		default: new ZealotSetup({moveSpeed: 0.3, boosted: true, healing: false}),
+	},
 	/**
 	 * Hydralisks are ranged creeps which may have a small amount of healing
 	 */

@@ -13,7 +13,8 @@ export let OverlordPriority = {
 
 	defense: {					// Defense of local and remote rooms
 		meleeDefense : 200,
-		rangedDefense: 201,
+		bunkerRangedDefense : 201,
+		rangedDefense: 202,
 	},
 
 	warSpawnCutoff: 299, 		// Everything past this is non-critical and won't be spawned in case of emergency

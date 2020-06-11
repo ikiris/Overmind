@@ -665,7 +665,7 @@ export class HydraliskSetup extends CombatCreepSetup {
 			moveSpeed         : opts.moveSpeed || 1,
 			putMoveFirstInBody: false,
 			bodyRatio         : {ranged: 12, tough: opts.armored ? 3 : 0, heal: opts.healing ? 4 : 0},
-			maxParts          : {ranged: 30, tough: 8, heal: 10},
+			maxParts          : {ranged: 44, tough: 8, heal: 10},
 			boosts            : opts.boosted ? ['ranged', 'tough', 'heal', 'move'] : [],
 		};
 		const bodyOpts: Full<BodyOpts> = _.defaults(opts.bodyOpts || {}, hydraliskBodyOpts);
@@ -742,6 +742,21 @@ export class RavagerSetup extends CombatCreepSetup {
 		};
 		const bodyOpts: Full<BodyOpts> = _.defaults(opts.bodyOpts || {}, ravagerBodyDefaults);
 		super(Roles.bunkerDefender, bodyOpts, CombatCreepSetup.generateMeleeAttackerBody);
+	}
+}
+
+export class ZealotSetup extends CombatCreepSetup {
+	constructor(opts: SimpleBodyOpts = {}) {
+		_.defaults(opts, {moveSpeed: .5, boosted: false, armored: false, healing: true, bodyOpts: {}});
+		const hydraliskBodyOpts: Full<BodyOpts> = {
+			moveSpeed         : opts.moveSpeed || .5,
+			putMoveFirstInBody: false,
+			bodyRatio         : {ranged: 12, tough: opts.armored ? 3 : 0, heal: opts.healing ? 4 : 0},
+			maxParts          : {ranged: 44, tough: 8, heal: 10},
+			boosts            : opts.boosted ? ['ranged', 'tough', 'heal', 'move'] : [],
+		};
+		const bodyOpts: Full<BodyOpts> = _.defaults(opts.bodyOpts || {}, hydraliskBodyOpts);
+		super(Roles.bunkerRanged, bodyOpts, CombatCreepSetup.generateRangedAttackerBody);
 	}
 }
 
@@ -836,4 +851,5 @@ global.DefaultCombatCreepSetups = {
 	remoteUpgrader: RemoteUpgraderSetup,
 	carrier       : CarrierSetup,
 	drone         : MinerSetup,
+	zealot        : ZealotSetup,
 };
