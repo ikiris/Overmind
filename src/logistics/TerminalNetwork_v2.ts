@@ -470,7 +470,7 @@ export class TerminalNetworkV2 implements ITerminalNetwork {
 			const avgEnergy = _.sum(nonExceptionalColonies, colony => colony.assets.energy) /
 							  nonExceptionalColonies.length;
 			this._energyThresholds = {
-				target   : avgEnergy,
+				target   : Math.max(avgEnergy, 50000),
 				surplus  : ENERGY_SURPLUS,
 				tolerance: avgEnergy / 5,
 			};
@@ -882,7 +882,7 @@ export class TerminalNetworkV2 implements ITerminalNetwork {
 					return false;
 				}
 			}
-			if (opts.requestType == 'passive' && !Abathur.isBaseMineral(resource)) {
+			if (opts.requestType == 'passive' && (!Abathur.isBaseMineral(resource) && resource != RESOURCE_ENERGY)) {
 				return false; // can only buy base minerals for passive requests
 			}
 			// If you can still buy the thing, then buy then thing!
